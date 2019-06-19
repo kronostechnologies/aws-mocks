@@ -1,0 +1,8 @@
+**
+!scripts/
+!src/
+!*.kts
+!detekt.yml
+!gradlew*
+!gradle/
+!config/

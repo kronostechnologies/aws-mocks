@@ -1,0 +1,23 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="trace">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="ktor" level="INFO"/>
+    <logger name="com.equisoft" level="TRACE"/>
+    <logger name="org.hibernate.validator" level="ERROR"/>
+    <logger name="[Koin]" level="WARN"/>
+
+    <logger name="acm" level="INFO"/>
+    <logger name="cognito" level="INFO"/>
+    <logger name="ec2" level="INFO"/>
+    <logger name="kms" level="INFO"/>
+    <logger name="route53" level="INFO"/>
+</configuration>

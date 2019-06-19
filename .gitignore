@@ -1,0 +1,26 @@
+# IDE and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+*.ipr
+*.iml
+
+# System Files
+.DS_Store
+Thumbs.db
+*.bak
+*.swp
+
+# Gradle
+.gradle
+build
+out
+
+# Misc
+*.log
+*.hprof
+
+# Environment
+*.dev.conf
