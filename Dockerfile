@@ -8,7 +8,7 @@ COPY . .
 RUN ./gradlew -Dorg.gradle.daemon=false shadowJar -xcheck
 
 # Application Stage
-FROM localstack/localstack:0.9.5 as app
+FROM localstack/localstack:0.10.4 as app
 
 COPY --from=gradle /home/gradle/code/build/libs/aws-mocks.jar aws-mocks.jar
 COPY ./config ./config
