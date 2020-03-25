@@ -2,6 +2,7 @@ package com.equisoft.awsmocks.cognito.application
 
 import com.amazonaws.services.cognitoidp.model.DomainDescriptionType
 import com.amazonaws.services.cognitoidp.model.ResourceServerType
+import com.amazonaws.services.cognitoidp.model.SmsMfaConfigType
 import com.amazonaws.services.cognitoidp.model.UserPoolClientType
 import com.amazonaws.services.cognitoidp.model.UserPoolType
 import com.equisoft.awsmocks.cognito.infrastructure.persistence.ResourceServerRepository
@@ -52,4 +53,16 @@ class UserPoolService(
         ?: throw ResourceNotFoundException()
 
     fun delete(userPoolId: String): UserPoolType? = userPoolRepository.remove(userPoolId)
+
+    fun setMfaConfig(
+        userPoolId: String,
+        mfaConfiguration: String?,
+        smsMfaConfiguration: SmsMfaConfigType?
+    ): UserPoolType {
+        return get(userPoolId)
+            .withMfaConfiguration(mfaConfiguration)
+            .withSmsAuthenticationMessage(smsMfaConfiguration?.smsAuthenticationMessage)
+            .withSmsConfiguration(smsMfaConfiguration?.smsConfiguration)
+            .also(this::addOrUpdate)
+    }
 }

@@ -14,6 +14,7 @@ import com.amazonaws.services.cognitoidp.model.StatusType
 import com.amazonaws.services.cognitoidp.model.UpdateUserPoolClientRequest
 import com.amazonaws.services.cognitoidp.model.UpdateUserPoolRequest
 import com.amazonaws.services.cognitoidp.model.UserPoolClientType
+import com.amazonaws.services.cognitoidp.model.UserPoolMfaType
 import com.amazonaws.services.cognitoidp.model.UserPoolPolicyType
 import com.amazonaws.services.cognitoidp.model.UserPoolType
 import com.equisoft.awsmocks.common.interfaces.http.accountId
@@ -74,7 +75,7 @@ fun userPoolTypeFromRequest(request: CreateUserPoolRequest): UserPoolType = User
     .withCreationDate(Date())
     .withLastModifiedDate(Date())
     .withName(request.poolName)
-    .withMfaConfiguration(request.mfaConfiguration)
+    .withMfaConfiguration(request.mfaConfiguration ?: UserPoolMfaType.OFF.toString())
     .withPolicies(request.policies ?: defaultPasswordPolicy())
     .withAdminCreateUserConfig(request.adminCreateUserConfig)
     .withAutoVerifiedAttributes(request.autoVerifiedAttributes)

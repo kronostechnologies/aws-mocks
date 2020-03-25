@@ -9,5 +9,6 @@ class HostedZoneRepository private constructor(
 ) : ConcurrentMap<String, HostedZone> by delegate {
     constructor() : this(ConcurrentHashMap())
 
+    @Synchronized
     override fun get(key: String?): HostedZone? = key?.let { delegate[key.removeSuffix(".")] }
 }

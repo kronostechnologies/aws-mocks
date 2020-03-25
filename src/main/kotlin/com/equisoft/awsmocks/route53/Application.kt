@@ -1,6 +1,8 @@
 package com.equisoft.awsmocks.route53
 
 import com.equisoft.awsmocks.common.context.startLocalKoin
+import com.equisoft.awsmocks.common.exceptions.BadRequestError
+import com.equisoft.awsmocks.common.exceptions.BadRequestException
 import com.equisoft.awsmocks.common.exceptions.ErrorResponse
 import com.equisoft.awsmocks.common.exceptions.NotFoundError
 import com.equisoft.awsmocks.common.exceptions.NotFoundException
@@ -32,7 +34,12 @@ private fun Application.init(injector: Koin) {
     installContentNegotiation(injector, ContentType.Application.Xml)
 
     install(StatusPages) {
-        exception<NotFoundException> { call.respond(HttpStatusCode.NotFound, ErrorResponse(NotFoundError())) }
+        exception<BadRequestException> {
+            call.respond(HttpStatusCode.BadRequest, ErrorResponse(BadRequestError(it.errorCode)))
+        }
+        exception<NotFoundException> {
+            call.respond(HttpStatusCode.NotFound, ErrorResponse(NotFoundError(it.errorCode)))
+        }
     }
 
     routing {

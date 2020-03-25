@@ -22,6 +22,8 @@ import com.amazonaws.services.kms.model.ListAliasesResult
 import com.amazonaws.services.kms.model.ListResourceTagsRequest
 import com.amazonaws.services.kms.model.ListResourceTagsResult
 import com.amazonaws.services.kms.model.Tag
+import com.amazonaws.services.kms.model.TagResourceRequest
+import com.amazonaws.services.kms.model.TagResourceResult
 import com.amazonaws.services.kms.model.UpdateKeyDescriptionRequest
 import com.amazonaws.services.kms.model.UpdateKeyDescriptionResult
 
@@ -70,6 +72,11 @@ class KmsRequestHandler(private val keyService: KeyService) {
                 keyService.updateDescription(request.keyId, request.description)
 
                 UpdateKeyDescriptionResult()
+            }
+            is TagResourceRequest -> {
+                keyService.addTags(request.keyId, request.tags)
+
+                TagResourceResult()
             }
             else -> throw IllegalArgumentException(request::class.simpleName)
         }

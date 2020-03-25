@@ -68,6 +68,10 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+
+    val testContainersVersion = "1.13.0"
+    testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
+    testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 }
 
 configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
@@ -77,7 +81,16 @@ configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
     failFast = true
 }
 
+kotlinter {
+    disabledRules = arrayOf("import-ordering", "no-wildcard-imports")
+    indentSize = 4
+}
+
 tasks {
+    check {
+        dependsOn("e2e")
+    }
+
     withType<ShadowJar> {
         archiveBaseName.set("aws-mocks")
         archiveClassifier.set("")
@@ -90,7 +103,9 @@ tasks {
     }
 
     withType<Test> {
-        useJUnitPlatform()
+        useJUnitPlatform {
+            excludeTags("e2e")
+        }
     }
 
     withType<KotlinCompile> {
@@ -100,19 +115,45 @@ tasks {
         }
     }
 
-    register("ci-compile") {
+    register<Test>("e2e") {
+        group = "verification"
+
+        mustRunAfter(detekt)
+        mustRunAfter(lintKotlin)
+        mustRunAfter("test")
+
+        useJUnitPlatform {
+            includeTags("e2e")
+        }
+    }
+
+    register("ci-classes") {
         group = "ci"
         dependsOn(testClasses)
     }
 
     register("ci-check") {
         group = "ci"
-        dependsOn(lintKotlin)
+
+        dependsOn("ci-classes")
+
         dependsOn(detekt)
+        dependsOn(lintKotlin)
     }
 
-    register("ci-tests") {
+    register("ci-unit-tests") {
         group = "ci"
+
+        dependsOn("ci-classes")
+
         dependsOn(test)
+    }
+
+    register("ci-e2e") {
+        group = "ci"
+
+        dependsOn("ci-classes")
+
+        dependsOn("e2e")
     }
 }

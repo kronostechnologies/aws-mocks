@@ -17,8 +17,8 @@ class KeyService(
         keyMetadataRepository[key.keyId] = key
     }
 
-    fun addTags(arn: String, tags: List<Tag>) {
-        val key: KeyMetadata = checkNotNull(keyMetadataRepository[arn])
+    fun addTags(id: String, tags: List<Tag>) {
+        val key: KeyMetadata = get(id)
         tagsRepository.update(key.keyId, tags, listOf())
     }
 

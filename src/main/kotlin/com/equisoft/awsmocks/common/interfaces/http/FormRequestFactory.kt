@@ -26,6 +26,8 @@ class FormRequestFactory(
 
         val request: AmazonWebServiceRequest = klass.getDeclaredConstructor().newInstance() as AmazonWebServiceRequest
 
+        request.parseAuthorization(call.request)
+
         return parametersDeserializer.addParameters(parameters, request)
     }
 

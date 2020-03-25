@@ -14,6 +14,7 @@ import java.util.UUID
 
 fun keyMetadataFromRequest(request: CreateKeyRequest): KeyMetadata = KeyMetadata()
     .withKeyId(UUID.randomUUID().toString())
+    .withCustomerMasterKeySpec(request.customerMasterKeySpec)
     .withKeyManager(KeyManagerType.AWS)
     .withOrigin(request.origin)
     .withKeyState(KeyState.Enabled)

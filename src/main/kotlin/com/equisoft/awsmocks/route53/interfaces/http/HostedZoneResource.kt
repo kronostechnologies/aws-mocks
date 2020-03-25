@@ -1,11 +1,13 @@
 package com.equisoft.awsmocks.route53.interfaces.http
 
+import com.amazonaws.services.route53.model.DelegationSet
 import com.amazonaws.services.route53.model.GetHostedZoneResult
 import com.amazonaws.services.route53.model.HostedZone
 import com.amazonaws.services.route53.model.ListHostedZonesRequest
 import com.amazonaws.services.route53.model.ListResourceRecordSetsRequest
 import com.equisoft.awsmocks.common.interfaces.http.XmlRequestFactory
 import com.equisoft.awsmocks.common.interfaces.http.getIdParameter
+import com.equisoft.awsmocks.route53.application.DelegationSetService
 import com.equisoft.awsmocks.route53.application.HostedZoneService
 import com.equisoft.awsmocks.route53.application.Route53RequestHandler
 import com.equisoft.awsmocks.route53.application.getHostedZoneResult
@@ -24,6 +26,7 @@ import org.koin.core.Koin
 fun hostedZoneResource(injector: Koin, parentRoute: Route) {
     parentRoute {
         val hostedZoneService: HostedZoneService by injector.inject()
+        val delegationSetService: DelegationSetService by injector.inject()
         val requestFactory: XmlRequestFactory by injector.inject()
         val requestHandler: Route53RequestHandler by injector.inject()
 
@@ -43,7 +46,9 @@ fun hostedZoneResource(injector: Koin, parentRoute: Route) {
             route("/{id}") {
                 get {
                     val hostedZone: HostedZone = hostedZoneService.get(getIdParameter())
+                    val delegationSet: DelegationSet? = delegationSetService.findForZone(hostedZone)
                     val hostedZoneResult: GetHostedZoneResult = getHostedZoneResult(hostedZone)
+                        .withDelegationSet(delegationSet)
 
                     call.respond(HttpStatusCode.OK, hostedZoneResult)
                 }

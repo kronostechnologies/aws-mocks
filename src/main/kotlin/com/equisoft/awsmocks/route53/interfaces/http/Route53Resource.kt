@@ -2,7 +2,10 @@ package com.equisoft.awsmocks.route53.interfaces.http
 
 import com.amazonaws.services.route53.model.ChangeInfo
 import com.amazonaws.services.route53.model.ChangeStatus
+import com.amazonaws.services.route53.model.CreateReusableDelegationSetRequest
+import com.amazonaws.services.route53.model.DeleteReusableDelegationSetRequest
 import com.amazonaws.services.route53.model.GetChangeResult
+import com.amazonaws.services.route53.model.GetReusableDelegationSetRequest
 import com.amazonaws.services.route53.model.ListTagsForResourceRequest
 import com.equisoft.awsmocks.common.interfaces.http.XmlRequestFactory
 import com.equisoft.awsmocks.common.interfaces.http.getIdParameter
@@ -12,6 +15,7 @@ import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import io.ktor.routing.delete
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
@@ -47,6 +51,28 @@ fun route53resource(injector: Koin, routing: Routing) {
                 post {
                     val request = requestFactory.create(call)
                     val result = requestHandler.handle(request, call.parameters.toMap())
+
+                    call.respond(HttpStatusCode.OK, result)
+                }
+            }
+
+            route("/delegationset") {
+                val requestHandler: Route53RequestHandler by injector.inject()
+
+                post {
+                    val result = requestHandler.handle(CreateReusableDelegationSetRequest(), call.parameters.toMap())
+
+                    call.respond(HttpStatusCode.OK, result)
+                }
+
+                get("/{id}") {
+                    val result = requestHandler.handle(GetReusableDelegationSetRequest(), call.parameters.toMap())
+
+                    call.respond(HttpStatusCode.OK, result)
+                }
+
+                delete("/{id}") {
+                    val result = requestHandler.handle(DeleteReusableDelegationSetRequest(), call.parameters.toMap())
 
                     call.respond(HttpStatusCode.OK, result)
                 }

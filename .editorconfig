@@ -26,7 +26,3 @@ trim_trailing_whitespace = false
 
 [Makefile]
 indent_style = tab
-
-[*.{kt,kts}]
-# https://youtrack.jetbrains.com/issue/KT-10974
-disabled_rules = import-ordering

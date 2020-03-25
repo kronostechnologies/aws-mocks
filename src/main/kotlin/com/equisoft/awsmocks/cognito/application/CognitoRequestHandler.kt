@@ -22,14 +22,19 @@ import com.amazonaws.services.cognitoidp.model.DescribeUserPoolDomainResult
 import com.amazonaws.services.cognitoidp.model.DescribeUserPoolRequest
 import com.amazonaws.services.cognitoidp.model.DescribeUserPoolResult
 import com.amazonaws.services.cognitoidp.model.DomainDescriptionType
+import com.amazonaws.services.cognitoidp.model.GetUserPoolMfaConfigRequest
+import com.amazonaws.services.cognitoidp.model.GetUserPoolMfaConfigResult
 import com.amazonaws.services.cognitoidp.model.ResourceServerType
+import com.amazonaws.services.cognitoidp.model.SetUserPoolMfaConfigRequest
+import com.amazonaws.services.cognitoidp.model.SetUserPoolMfaConfigResult
+import com.amazonaws.services.cognitoidp.model.SmsMfaConfigType
 import com.amazonaws.services.cognitoidp.model.UpdateUserPoolClientRequest
 import com.amazonaws.services.cognitoidp.model.UpdateUserPoolClientResult
 import com.amazonaws.services.cognitoidp.model.UpdateUserPoolRequest
 import com.amazonaws.services.cognitoidp.model.UserPoolClientType
 import com.amazonaws.services.cognitoidp.model.UserPoolType
 
-@SuppressWarnings("LongMethod")
+@SuppressWarnings("ComplexMethod", "LongMethod")
 class CognitoRequestHandler(private val userPoolService: UserPoolService) {
     fun handle(request: AmazonWebServiceRequest): AmazonWebServiceResult<ResponseMetadata> =
         when (request) {
@@ -81,6 +86,28 @@ class CognitoRequestHandler(private val userPoolService: UserPoolService) {
                 val userPool: UserPoolType = userPoolService.get(request.userPoolId)
 
                 DescribeUserPoolResult().withUserPool(userPool)
+            }
+            is GetUserPoolMfaConfigRequest -> {
+                val userPool: UserPoolType = userPoolService.get(request.userPoolId)
+
+                GetUserPoolMfaConfigResult()
+                    .withMfaConfiguration(userPool.mfaConfiguration)
+                    .withSmsMfaConfiguration(SmsMfaConfigType()
+                        .withSmsAuthenticationMessage(userPool.smsAuthenticationMessage)
+                        .withSmsConfiguration(userPool.smsConfiguration)
+                    )
+            }
+            is SetUserPoolMfaConfigRequest -> {
+                userPoolService.setMfaConfig(
+                    request.userPoolId,
+                    request.mfaConfiguration,
+                    request.smsMfaConfiguration
+                )
+
+                SetUserPoolMfaConfigResult()
+                    .withMfaConfiguration(request.mfaConfiguration)
+                    .withSmsMfaConfiguration(request.smsMfaConfiguration)
+                    .withSoftwareTokenMfaConfiguration(request.softwareTokenMfaConfiguration)
             }
             is UpdateUserPoolClientRequest -> {
                 val userPoolClient: UserPoolClientType = updateUserPoolClientFromRequest(request)

@@ -6,10 +6,18 @@ import com.amazonaws.services.route53.model.ChangeInfo
 import com.amazonaws.services.route53.model.ChangeStatus
 import com.amazonaws.services.route53.model.CreateHostedZoneRequest
 import com.amazonaws.services.route53.model.CreateHostedZoneResult
+import com.amazonaws.services.route53.model.CreateReusableDelegationSetRequest
+import com.amazonaws.services.route53.model.DelegationSet
 import com.amazonaws.services.route53.model.GetHostedZoneResult
 import com.amazonaws.services.route53.model.HostedZone
 import com.amazonaws.services.route53.model.HostedZoneConfig
 import com.amazonaws.services.route53.model.UpdateHostedZoneCommentResult
+import com.equisoft.awsmocks.route53.domain.newDefaultDelegationSet
+import java.util.UUID
+
+fun createDelegationSetFromRequest(request: CreateReusableDelegationSetRequest): DelegationSet =
+    newDefaultDelegationSet(UUID.randomUUID().toString())
+        .withCallerReference(request.callerReference)
 
 fun createHostedZoneFromRequest(zoneRequest: CreateHostedZoneRequest): HostedZone {
     val zoneName = zoneRequest.name

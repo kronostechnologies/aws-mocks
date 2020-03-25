@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "__type")
 sealed class Error(val code: String, val message: String = "")
 
+@JsonTypeName("BadRequestException")
+class BadRequestError(code: String? = null) : Error(code ?: "BadRequest")
+
 @JsonTypeName("NotFoundException")
 class NotFoundError(code: String? = null) : Error(code ?: "NotFound")
 
