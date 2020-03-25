@@ -7,11 +7,12 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
 class CustomJacksonAnnotationIntrospector : JacksonAnnotationIntrospector() {
     override fun findNameForSerialization(annotated: Annotated): PropertyName? {
         val listItem: ListItem? = annotated.getAnnotation(ListItem::class.java)
+        val wrapError: WrapError? = annotated.getAnnotation(WrapError::class.java)
 
-        return if (listItem != null) {
-            PropertyName.construct(listItem.value)
-        } else {
-            super.findNameForSerialization(annotated)
+        return when {
+            listItem != null -> PropertyName.construct(listItem.value)
+            wrapError != null -> PropertyName.construct(wrapError.value)
+            else -> super.findNameForSerialization(annotated)
         }
     }
 }

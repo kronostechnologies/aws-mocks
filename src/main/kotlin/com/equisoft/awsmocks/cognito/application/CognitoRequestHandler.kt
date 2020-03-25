@@ -34,7 +34,7 @@ import com.amazonaws.services.cognitoidp.model.UpdateUserPoolRequest
 import com.amazonaws.services.cognitoidp.model.UserPoolClientType
 import com.amazonaws.services.cognitoidp.model.UserPoolType
 
-@SuppressWarnings("ComplexMethod", "LongMethod")
+@SuppressWarnings("LongMethod")
 class CognitoRequestHandler(private val userPoolService: UserPoolService) {
     fun handle(request: AmazonWebServiceRequest): AmazonWebServiceResult<ResponseMetadata> =
         when (request) {

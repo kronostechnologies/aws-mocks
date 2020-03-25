@@ -75,15 +75,44 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 - Supports only `client_credentials`  
 
 ### EC2
+* [x] [AssociateRouteTableRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateRouteTable.html)  
+* [x] [AttachInternetGatewayRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AttachInternetGateway.html)  
 * [x] [AuthorizeSecurityGroupEgressRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AuthorizeSecurityGroupEgress.html)  
+* [x] [AuthorizeSecurityGroupIngressRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AuthorizeSecurityGroupIngress.html)  
+* [x] [CreateInternetGatewayRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateInternetGateway.html)  
+* [x] [CreateRouteRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateRoute.html)  
+* [x] [CreateRouteTableRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateRouteTable.html)  
 * [x] [CreateSecurityGroupRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateSecurityGroup.html)  
+* [x] [CreateSubnetRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateSubnet.html)  
+* [x] [CreateTagsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html)  
 * [x] [CreateVpcEndpointRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpcEndpoint.html)  
+* [x] [CreateVpcRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpc.html)  
 * [x] [DescribeAccountAttributesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeAccountAttributes.html)  
+* [x] [DescribeImagesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html)  
+* [x] [DescribeInstanceAttributeRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstanceAttribute.html)  
+* [x] [DescribeInstanceCreditSpecificationsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstanceCreditSpecifications.html)  
+* [x] [DescribeInstancesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html)  
+* [x] [DescribeInternetGatewaysRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInternetGateways.html)  
+* [x] [DescribeNetworkAclsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeNetworkAcls.html)  
 * [x] [DescribePrefixListsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribePrefixLists.html)  
+* [x] [DescribeRouteTablesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRouteTables.html)  
 * [x] [DescribeSecurityGroupsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSecurityGroups.html)  
+* [x] [DescribeSubnetsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSubnets.html)  
+* [x] [DescribeTagsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeTags.html)  
+* [x] [DescribeVolumesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVolumes.html)  
+* [x] [DescribeVpcAttributeRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcAttribute.html)  
+* [x] [DescribeVpcClassicLinkRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcClassicLink.html)  
+* [x] [DescribeVpcClassicLinkDnsSupportRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcClassicLinkDnsSupport.html)  
 * [x] [DescribeVpcEndpointsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcEndpoints.html)  
 * [x] [DescribeVpcEndpointServicesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcEndpointServices.html)  
+* [x] [DescribeVpcsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcs.html)  
+* [x] [DisassociateRouteTableRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateRouteTable.html)  
+* [x] [ModifyInstanceAttributeRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceAttribute.html)  
+* [x] [ModifyVpcAttributeRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyVpcAttribute.html)  
 * [x] [ModifyVpcEndpointRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyVpcEndpoint.html)  
+* [x] [RevokeSecurityGroupEgressRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RevokeSecurityGroupEgress.html)  
+* [x] [RunInstancesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html)  
+* [x] [TerminateInstancesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_TerminateInstances.html)  
 
 ### KMS
 * [x] [CreateAliasRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateAlias.html)  
@@ -107,3 +136,13 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [ListResourceRecordSetsRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html)  
 * [x] [ListTagsForResourceRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTagsForResource.html)  
 * [x] [UpdateHostedZoneCommentRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_UpdateHostedZoneComment.html)  
+
+## Development
+### Building the docker image
+`make build_image`
+
+### Applying Terraform infrastructure
+All the Terraform config is in [the test resources folder](./src/test/resources)
+
+1. Run either the Docker image or the app locally using your IDE
+1. `make test_infra`

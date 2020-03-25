@@ -1,6 +1,6 @@
 provider "aws" {
     region = "us-east-1"
-    access_key = "1234567890"
+    access_key = "12345678901234"
     secret_key = "unused"
 
     endpoints {
@@ -15,6 +15,10 @@ provider "aws" {
     skip_credentials_validation = true
     skip_metadata_api_check = true
     skip_requesting_account_id = true
+}
+
+module "ec2" {
+    source = "./ec2"
 }
 
 module "kms" {
