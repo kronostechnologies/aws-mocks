@@ -5,6 +5,7 @@ package com.equisoft.awsmocks.common.context
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
 import com.uchuhimo.konf.OptionalItem
+import com.uchuhimo.konf.source.hocon
 import org.koin.dsl.module
 
 private const val ENV_FILENAME = "application.conf"

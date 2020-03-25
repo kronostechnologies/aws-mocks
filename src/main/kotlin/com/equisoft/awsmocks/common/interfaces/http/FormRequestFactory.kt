@@ -24,12 +24,7 @@ class FormRequestFactory(
         val actionName: String = checkNotNull(parameters[ACTION_NAME_PARAM])
         val klass: Class<*> = Class.forName("$rootPackage.${actionName}Request")
 
-        val request: AmazonWebServiceRequest = klass.newInstance() as AmazonWebServiceRequest
-
-        val accountId: String? = call.getAccountId()
-        if (accountId != null) {
-            request.accountId = accountId
-        }
+        val request: AmazonWebServiceRequest = klass.getDeclaredConstructor().newInstance() as AmazonWebServiceRequest
 
         return parametersDeserializer.addParameters(parameters, request)
     }

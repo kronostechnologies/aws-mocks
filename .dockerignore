@@ -1,8 +1,12 @@
 **
+
 !scripts/
+!buildSrc
 !src/
 !*.kts
 !detekt.yml
 !gradlew*
 !gradle/
 !config/
+
+**/src/test

@@ -14,8 +14,6 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.Jetty
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.koin.Logger.SLF4JLogger
-import org.koin.core.KoinApplication
 import org.slf4j.LoggerFactory
 
 private val LOGGER = LoggerFactory.getLogger("com.equisoft.awsmocks")
@@ -23,8 +21,6 @@ private val LOGGER = LoggerFactory.getLogger("com.equisoft.awsmocks")
 @SuppressWarnings("LongMethod")
 fun main() {
     runBlocking {
-        KoinApplication.logger = SLF4JLogger()
-
         listOf(
             Application::route53 to applicationConfig[PortsEnvironment.route53],
             Application::cognito to applicationConfig[PortsEnvironment.cognito],
