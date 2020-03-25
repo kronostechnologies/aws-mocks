@@ -10,7 +10,6 @@ import io.ktor.features.ContentNegotiation.ConverterRegistration
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.content.OutgoingContent
-import io.ktor.http.content.TextContent
 import io.ktor.response.ApplicationSendPipeline
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelineContext
@@ -58,11 +57,12 @@ private fun List<ConverterRegistration>.find(contentType: ContentType): Converte
     it.contentType.match(contentType)
 } ?: if (contentType == ContentType.Any) null else find(ContentType.Any)
 
+@OptIn(ExperimentalStdlibApi::class)
 private suspend fun ConverterRegistration.convertToString(
     context: PipelineContext<Any, ApplicationCall>,
     value: Any
 ): String? =
     when (val content: Any? = converter.convertForSend(context, contentType, value)) {
-        is TextContent -> content.text
+        is OutgoingContent.ByteArrayContent -> content.bytes().decodeToString()
         else -> content.toString()
     }
