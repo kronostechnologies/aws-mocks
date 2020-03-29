@@ -54,6 +54,14 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [ListTagsForCertificateRequest](https://docs.aws.amazon.com/acm/latest/APIReference/API_ListTagsForCertificate.html)  
 * [x] [RequestCertificateRequest](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html)  
 
+### AutoScaling
+* [x] [AttachLoadBalancerTargetGroupsRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_AttachLoadBalancerTargetGroups.html)  
+* [x] [CreateAutoScalingGroupRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_CreateAutoScalingGroup.html)  
+* [x] [CreateLaunchConfigurationRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_CreateLaunchConfiguration.html)  
+* [x] [DescribeAutoScalingGroupsRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeAutoScalingGroups.html)  
+* [x] [DeleteLaunchConfigurationRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DeleteLaunchConfiguration.html)  
+* [x] [DescribeLaunchConfigurationsRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeLaunchConfigurations.html)  
+
 ### Cognito-idp
 * [x] [CreateResourceServerRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateResourceServer.html)  
 * [x] [CreateUserPoolClientRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateUserPoolClient.html)  

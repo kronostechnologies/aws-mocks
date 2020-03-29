@@ -5,6 +5,7 @@ provider "aws" {
 
     endpoints {
         acm = "http://${var.hostname}:4501"
+        autoscaling = "http://${var.hostname}:4506"
         cognitoidp = "http://${var.hostname}:4500"
         ec2 = "http://${var.hostname}:4503"
         kms = "http://${var.hostname}:4502"
@@ -15,6 +16,12 @@ provider "aws" {
     skip_credentials_validation = true
     skip_metadata_api_check = true
     skip_requesting_account_id = true
+}
+
+module "autoscaling" {
+    source = "./autoscaling"
+
+    subnet_ids = [module.ec2.subnet.id]
 }
 
 module "ec2" {

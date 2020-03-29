@@ -1,6 +1,7 @@
 package com.equisoft.awsmocks
 
 import com.equisoft.awsmocks.acm.acm
+import com.equisoft.awsmocks.autoscaling.autoScaling
 import com.equisoft.awsmocks.cognito.cognito
 import com.equisoft.awsmocks.common.context.PortsEnvironment
 import com.equisoft.awsmocks.common.context.applicationConfig
@@ -22,11 +23,12 @@ private val LOGGER = LoggerFactory.getLogger("com.equisoft.awsmocks")
 fun main() {
     runBlocking {
         listOf(
-            Application::route53 to applicationConfig[PortsEnvironment.route53],
-            Application::cognito to applicationConfig[PortsEnvironment.cognito],
             Application::acm to applicationConfig[PortsEnvironment.acm],
+            Application::autoScaling to applicationConfig[PortsEnvironment.autoScaling],
+            Application::cognito to applicationConfig[PortsEnvironment.cognito],
             Application::kms to applicationConfig[PortsEnvironment.kms],
-            Application::ec2 to applicationConfig[PortsEnvironment.ec2]
+            Application::ec2 to applicationConfig[PortsEnvironment.ec2],
+            Application::route53 to applicationConfig[PortsEnvironment.route53]
         ).map {
             launch {
                 val name = it.first.name
