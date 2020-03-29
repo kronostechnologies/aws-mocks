@@ -140,6 +140,14 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [ModifyTargetGroupRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_ModifyTargetGroup.html)  
 * [x] [SetSecurityGroupsRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_SetSecurityGroups.html)  
 
+### ECS
+* [x] [CreateClusterRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateCluster.html)  
+* [x] [CreateService](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html)  
+* [x] [DescribeClustersRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeClusters.html)  
+* [x] [DescribeServicesRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeServices.html)  
+* [x] [DescribeTaskDefinitionRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeTaskDefinition.html)  
+* [x] [RegisterTaskDefinitionRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RegisterTaskDefinition.html)  
+
 ### KMS
 * [x] [CreateAliasRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateAlias.html)  
 * [x] [CreateKeyRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html)  
