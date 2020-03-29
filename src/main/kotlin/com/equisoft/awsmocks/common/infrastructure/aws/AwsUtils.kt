@@ -8,6 +8,7 @@ enum class AwsService(private val serviceName: String) {
     COGNITO("cognito"),
     EC2("ec2"),
     ECS("ecs"),
+    ELB("elasticloadbalancing"),
     KMS("kms"),
     IAM("iam"),
     ;

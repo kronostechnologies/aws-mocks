@@ -42,6 +42,7 @@ object PortsEnvironment : ConfigSpec("ports") {
     val kms by optional(DefaultPorts.KMS)
     val ec2 by optional(DefaultPorts.EC2)
     val route53 by optional(DefaultPorts.ROUTE53)
+    val elb by optional(DefaultPorts.ELB)
 }
 
 object Route53Environment : ConfigSpec("route53") {

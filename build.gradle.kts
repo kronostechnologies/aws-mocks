@@ -49,6 +49,7 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-autoscaling:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-cognitoidp:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-ec2:$awsSdkVersion")
+    implementation("com.amazonaws:aws-java-sdk-elasticloadbalancingv2:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-kms:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-route53:$awsSdkVersion")
 
