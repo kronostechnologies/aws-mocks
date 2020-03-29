@@ -1,6 +1,7 @@
 package com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson
 
 import com.equisoft.awsmocks.common.exceptions.Error
+import com.equisoft.awsmocks.common.interfaces.http.serialization.jackson.WrappedValueSerializer
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider

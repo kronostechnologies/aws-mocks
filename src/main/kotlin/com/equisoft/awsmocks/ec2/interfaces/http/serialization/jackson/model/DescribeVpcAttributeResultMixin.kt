@@ -1,6 +1,6 @@
 package com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model
 
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.AsValue
+import com.equisoft.awsmocks.common.interfaces.http.serialization.jackson.AsValue
 import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "DescribeVpcAttributeResponse")

@@ -4,7 +4,7 @@ import com.amazonaws.services.ec2.model.PropagatingVgw
 import com.amazonaws.services.ec2.model.Route
 import com.amazonaws.services.ec2.model.RouteTableAssociation
 import com.amazonaws.services.ec2.model.Tag
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.ListItem
+import com.equisoft.awsmocks.common.interfaces.http.serialization.jackson.ListItem
 
 interface RouteTableMixin {
     @ListItem("tagSet")

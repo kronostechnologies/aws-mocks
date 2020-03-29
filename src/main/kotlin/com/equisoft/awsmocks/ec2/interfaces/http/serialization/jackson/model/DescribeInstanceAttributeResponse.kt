@@ -5,7 +5,7 @@ import com.amazonaws.ResponseMetadata
 import com.amazonaws.services.ec2.model.GroupIdentifier
 import com.amazonaws.services.ec2.model.InstanceAttribute
 import com.amazonaws.services.ec2.model.InstanceBlockDeviceMapping
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.ListItem
+import com.equisoft.awsmocks.common.interfaces.http.serialization.jackson.ListItem
 import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "DescribeInstanceAttributeResponse")
