@@ -8,6 +8,8 @@ import com.amazonaws.services.kms.model.KeyManagerType
 import com.amazonaws.services.kms.model.KeyMetadata
 import com.amazonaws.services.kms.model.KeyState
 import com.amazonaws.services.kms.model.KeyUsageType
+import com.equisoft.awsmocks.common.infrastructure.aws.AwsService.IAM
+import com.equisoft.awsmocks.common.infrastructure.aws.AwsService.KMS
 import com.equisoft.awsmocks.common.interfaces.http.accountId
 import java.util.Date
 import java.util.UUID
@@ -24,7 +26,7 @@ fun keyMetadataFromRequest(request: CreateKeyRequest): KeyMetadata = KeyMetadata
     .withEnabled(true)
     .withDescription(request.description)
     .apply {
-        withArn("arn:aws:kms:us-east-1:${request.accountId}:key/$keyId")
+        withArn(KMS.createArn(request.accountId, "key/$keyId"))
     }
 
 fun defaultPolicy(request: AmazonWebServiceRequest) = """{
@@ -32,7 +34,7 @@ fun defaultPolicy(request: AmazonWebServiceRequest) = """{
     "Statement":[{
         "Action":"kms:*",
         "Effect":"Allow",
-        "Principal":{"AWS":"arn:aws:iam::${request.accountId}:root"},
+        "Principal":{"AWS":"${IAM.createArn(request.accountId, "root", "")}"},
         "Resource":"*",
         "Sid":"Enable IAM User Permissions"
     }],

@@ -25,7 +25,6 @@ class FormRequestFactory(
         val klass: Class<*> = Class.forName("$rootPackage.${actionName}Request")
 
         val request: AmazonWebServiceRequest = klass.getDeclaredConstructor().newInstance() as AmazonWebServiceRequest
-
         request.parseAuthorization(call.request)
 
         return parametersDeserializer.addParameters(parameters, request)
@@ -52,10 +51,36 @@ fun Parameters.toList(name: String): List<String> = filter { key, _ -> key.conta
  * into a map of ("param-name" to ["value-1", "value-2"], "param-name-2" to ["value-3"])
  */
 fun Parameters.toMap(name: String, keyName: String, valueName: String): Map<String, List<String>> =
-    filter { key, _ -> key.startsWith("$name.", true) }
-        .flattenEntries()
-        .groupBy { it.first.replace(Regex("$name\\.(\\d*?)\\..*")) { it.groupValues[1] } }
-        .map { it.value }
+    groupListPerIndex(name)
+        .values
         .associateBy({ it.find { pair -> pair.first.endsWith(keyName) }!!.second }) { values ->
             values.filter { it.first.matches(Regex(".*$valueName\\.\\d*")) }.map { it.second }
         }
+
+fun <T> Parameters.toObjects(name: String, factory: () -> T, block: (Int, T, Pair<String, String>) -> T): List<T> =
+    groupListPerIndex(name)
+        .mapValues { (_, values) ->
+            values.map {
+                it.first.replace(Regex("$name\\.\\d*\\.*"), "") to it.second
+            }
+        }
+        .map { (index, values) ->
+            values.fold(factory()) { accumulator, keyValue ->
+                block(index.toInt(), accumulator, keyValue)
+            }
+        }
+
+private fun Parameters.groupListPerIndex(name: String): Map<String, List<Pair<String, String>>> {
+    return filter { key, _ -> key.startsWith("$name.", true) }
+        .flattenEntries()
+        .groupBy { it.first.replace(Regex("$name\\.(\\d*?)\\..*")) { match -> match.groupValues[1] } }
+}
+
+fun Parameters.toPairs(name: String, keyName: String, valueName: String): List<Pair<String, String>> =
+    filter { key, _ -> key.startsWith("$name.", true) }
+        .flattenEntries()
+        .groupBy { it.first.replace(Regex("$name\\.(\\d*?)\\..*")) { match -> match.groupValues[1] } }
+        .values
+        .associateBy({ it.find { pair -> pair.first.endsWith(keyName) }!!.second }) {
+            it.find { pair -> pair.first.endsWith(valueName) }!!.second
+        }.toList()

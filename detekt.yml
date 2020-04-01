@@ -67,7 +67,7 @@ complexity:
   ComplexMethod:
     active: true
     threshold: 15
-    ignoreSingleWhenExpression: false
+    ignoreSingleWhenExpression: true
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
     nestingFunctions: run,let,apply,with,also,use,forEach,isNotNull,ifNull
@@ -98,7 +98,7 @@ complexity:
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   TooManyFunctions:
-    active: true
+    active: false
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     thresholdInFiles: 11
     thresholdInClasses: 11

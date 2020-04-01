@@ -1,28 +1,55 @@
 package com.equisoft.awsmocks.ec2.application
 
 import com.amazonaws.services.ec2.model.Filter
+import com.amazonaws.services.ec2.model.IpPermission
 import com.amazonaws.services.ec2.model.SecurityGroup
-import com.equisoft.awsmocks.common.exceptions.NotFoundException
+import com.amazonaws.services.ec2.model.Tag
+import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepository
 import com.equisoft.awsmocks.ec2.infrastructure.persistence.SecurityGroupRepository
 
 class SecurityGroupService(
-    private val securityGroupRepository: SecurityGroupRepository
-) {
-    fun addOrUpdate(securityGroup: SecurityGroup) {
-        securityGroupRepository[securityGroup.groupId] = securityGroup
-    }
+    securityGroupRepository: SecurityGroupRepository,
+    tagsRepository: ResourceTagsRepository<Tag>
+) : BaseEc2Service<SecurityGroup, SecurityGroupRepository>({ it.groupId }, securityGroupRepository, tagsRepository) {
+    override val notFoundMessage: String = "InvalidSecurityGroupID.NotFound"
 
-    fun get(id: String): SecurityGroup = securityGroupRepository[id]
-        ?: throw NotFoundException("InvalidSecurityGroupId.NotFound")
+    override fun withTags(value: SecurityGroup, tags: Collection<Tag>): SecurityGroup = value.withTags(tags)
 
     fun getAll(filters: List<Filter>, groupIds: List<String>, groupNames: List<String>): List<SecurityGroup> {
-        val groups: MutableCollection<SecurityGroup> = securityGroupRepository.values
+        val filteredGroups: MutableList<SecurityGroup> = mutableListOf()
+        filteredGroups.addAll(super.getAll(groupIds, filters))
 
-        return when {
-            filters.isNotEmpty() -> groups.toList() // Not used at the moment
-            groupIds.isNotEmpty() -> groups.filter { it.groupId in groupIds }
-            groupNames.isNotEmpty() -> groups.filter { it.groupName in groupNames }
-            else -> groups.toList()
+        if (groupNames.isNotEmpty()) {
+            filteredGroups.addAll(
+                repository.values.filter { it.groupName in groupNames }
+                    .map { it.retrieveTags() }
+            )
         }
+
+        return filteredGroups
+    }
+
+    fun authorizeEgress(groupId: String, ipPermissions: List<IpPermission>) {
+        val securityGroup: SecurityGroup = get(groupId)
+
+        securityGroup.ipPermissionsEgress.addAll(ipPermissions)
+
+        addOrUpdate(securityGroup)
+    }
+
+    fun authorizeIngress(groupId: String, ipPermissions: List<IpPermission>) {
+        val securityGroup: SecurityGroup = get(groupId)
+
+        securityGroup.ipPermissions.addAll(ipPermissions)
+
+        addOrUpdate(securityGroup)
+    }
+
+    fun revokeEgress(groupId: String, ipPermissions: List<IpPermission>) {
+        val securityGroup: SecurityGroup = get(groupId)
+
+        securityGroup.ipPermissionsEgress.removeIf(ipPermissions::contains)
+
+        addOrUpdate(securityGroup)
     }
 }

@@ -1,52 +1,27 @@
 package com.equisoft.awsmocks.ec2.context
 
-import com.amazonaws.services.ec2.model.AccountAttribute
-import com.amazonaws.services.ec2.model.AuthorizeSecurityGroupEgressResult
-import com.amazonaws.services.ec2.model.DescribeAccountAttributesResult
-import com.amazonaws.services.ec2.model.DescribePrefixListsResult
-import com.amazonaws.services.ec2.model.DescribeSecurityGroupsResult
-import com.amazonaws.services.ec2.model.DescribeVpcEndpointServicesResult
-import com.amazonaws.services.ec2.model.DescribeVpcEndpointsResult
-import com.amazonaws.services.ec2.model.IpPermission
-import com.amazonaws.services.ec2.model.ModifyVpcEndpointResult
-import com.amazonaws.services.ec2.model.PrefixList
-import com.amazonaws.services.ec2.model.SecurityGroup
-import com.amazonaws.services.ec2.model.ServiceDetail
-import com.amazonaws.services.ec2.model.Tag
-import com.amazonaws.services.ec2.model.VpcEndpoint
+import com.amazonaws.services.ec2.model.*
 import com.equisoft.awsmocks.common.context.contentConvertersModule
 import com.equisoft.awsmocks.common.context.objectMapper
 import com.equisoft.awsmocks.common.context.xmlMapper
+import com.equisoft.awsmocks.common.exceptions.Error
+import com.equisoft.awsmocks.common.exceptions.ErrorResponse
+import com.equisoft.awsmocks.common.infrastructure.persistence.Repository
 import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepository
 import com.equisoft.awsmocks.common.interfaces.http.FormRequestFactory
 import com.equisoft.awsmocks.common.interfaces.http.ParametersDeserializer
-import com.equisoft.awsmocks.ec2.application.Ec2RequestHandler
-import com.equisoft.awsmocks.ec2.application.SecurityGroupService
-import com.equisoft.awsmocks.ec2.application.VpcService
-import com.equisoft.awsmocks.ec2.infrastructure.persistence.SecurityGroupRepository
-import com.equisoft.awsmocks.ec2.infrastructure.persistence.ServiceDetailRepository
-import com.equisoft.awsmocks.ec2.infrastructure.persistence.VpcEndpointRepository
+import com.equisoft.awsmocks.ec2.application.*
+import com.equisoft.awsmocks.ec2.infrastructure.persistence.*
 import com.equisoft.awsmocks.ec2.interfaces.http.Ec2ParametersDeserializer
 import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.CustomJacksonAnnotationIntrospector
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.AccountAttributeMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.AuthorizeSecurityGroupEgressMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.DescribeAccountAttributesMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.DescribePrefixListsMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.DescribeSecurityGroupsMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.DescribeVpcEndpointServicesMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.DescribeVpcEndpointsMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.IpPermissionMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.ModifyVpcEndpointMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.PrefixListMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.SecurityGroupMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.ServiceDetailMixin
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.VpcEndpointMixin
+import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.*
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector
 import org.koin.core.module.Module
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 @SuppressWarnings("LongMethod")
@@ -54,15 +29,33 @@ fun ec2Modules(): List<Module> {
     return listOf(module {
         single(createdAtStart = true) { Ec2Bootstrapper(get(), get()) }
 
-        single { VpcService(get(), get()) }
-        single { SecurityGroupService(get()) }
+        single { InstanceService(get(), get(), get()) }
+        single { InternetGatewayService(get(), get(), get()) }
+        single { ReservationService(get(), get(), get(), get(), get()) }
+        single { RouteTableService(get(), get()) }
+        single { SecurityGroupService(get(), get()) }
+        single { SubnetService(get(), get(), get()) }
+        single { VolumeService(get(), get()) }
+        single { VpcService(get(), get(), get()) }
+        single { VpcEndpointService(get(), get(), get()) }
 
-        single { VpcEndpointRepository() }
-        single { ServiceDetailRepository() }
-        single { SecurityGroupRepository() }
+        single { InstanceRepository() } bind Repository::class
+        single { InternetGatewayRepository() } bind Repository::class
+        single { ReservationRepository() } bind Repository::class
         single { ResourceTagsRepository<Tag> { value } }
+        single { RouteTableRepository() } bind Repository::class
+        single { SecurityGroupRepository() } bind Repository::class
+        single { ServiceDetailRepository() }
+        single { SubnetRepository() } bind Repository::class
+        single { VolumeRepository() } bind Repository::class
+        single { VpcRepository() } bind Repository::class
+        single { VpcAttributesRepository() }
+        single { VpcEndpointRepository() } bind Repository::class
 
-        single { Ec2RequestHandler(get(), get()) }
+        single { ResourcesRepository(getAll()) }
+
+        single { Ec2RequestHandler(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+
         single<ParametersDeserializer> { Ec2ParametersDeserializer() }
         single { FormRequestFactory(get(), "com.amazonaws.services.ec2.model") }
 
@@ -78,17 +71,50 @@ fun ec2Modules(): List<Module> {
     }, contentConvertersModule())
 }
 
-private fun XmlMapper.addMixIns(): XmlMapper = addMixIn(AccountAttribute::class.java, AccountAttributeMixin::class.java)
+private fun XmlMapper.addMixIns(): XmlMapper = this
+    .addMixIn(AccountAttribute::class.java, AccountAttributeMixin::class.java)
+    .addMixIn(AssociateRouteTableResult::class.java, AssociateRouteTableResultMixin::class.java)
+    .addMixIn(AttachInternetGatewayResult::class.java, AttachInternetGatewayResultMixin::class.java)
     .addMixIn(AuthorizeSecurityGroupEgressResult::class.java, AuthorizeSecurityGroupEgressMixin::class.java)
+    .addMixIn(AuthorizeSecurityGroupIngressResult::class.java, AuthorizeSecurityGroupIngressResultMixin::class.java)
+    .addMixIn(CreateRouteResult::class.java, CreateRouteResultMixin::class.java)
+    .addMixIn(CreateRouteTableResult::class.java, CreateRouteTableResultMixin::class.java)
+    .addMixIn(CreateInternetGatewayResult::class.java, CreateInternetGatewayResultMixin::class.java)
+    .addMixIn(CreateSubnetResult::class.java, CreateSubnetResultMixin::class.java)
+    .addMixIn(CreateVpcResult::class.java, CreateVpcResultMixin::class.java)
     .addMixIn(DescribeAccountAttributesResult::class.java, DescribeAccountAttributesMixin::class.java)
+    .addMixIn(DescribeInstanceCreditSpecificationsResult::class.java,
+        DescribeInstanceCreditSpecificationsResultMixin::class.java)
+    .addMixIn(DescribeImagesResult::class.java, DescribeImagesResultMixin::class.java)
+    .addMixIn(DescribeInstancesResult::class.java, DescribeInstancesResultMixin::class.java)
+    .addMixIn(DescribeInternetGatewaysResult::class.java, DescribeInternetGatewaysResultMixin::class.java)
     .addMixIn(DescribePrefixListsResult::class.java, DescribePrefixListsMixin::class.java)
+    .addMixIn(DescribeRouteTablesResult::class.java, DescribeRouteTablesResultMixin::class.java)
     .addMixIn(DescribeSecurityGroupsResult::class.java, DescribeSecurityGroupsMixin::class.java)
+    .addMixIn(DescribeSubnetsResult::class.java, DescribeSubnetsResultMixin::class.java)
+    .addMixIn(DescribeTagsResult::class.java, DescribeTagsResultMixin::class.java)
+    .addMixIn(DescribeVolumesResult::class.java, DescribeVolumesResultMixin::class.java)
+    .addMixIn(DescribeVpcAttributeResult::class.java, DescribeVpcAttributeResultMixin::class.java)
     .addMixIn(DescribeVpcEndpointsResult::class.java, DescribeVpcEndpointsMixin::class.java)
     .addMixIn(DescribeVpcEndpointServicesResult::class.java, DescribeVpcEndpointServicesMixin::class.java)
+    .addMixIn(DescribeVpcsResult::class.java, DescribeVpcsResultMixin::class.java)
+    .addMixIn(DisassociateRouteTableResult::class.java, DisassociateRouteTableResultMixin::class.java)
+    .addMixIn(Instance::class.java, InstanceMixin::class.java)
+    .addMixIn(InstanceNetworkInterface::class.java, InstanceNetworkInterfaceMixin::class.java)
+    .addMixIn(InternetGateway::class.java, InternetGatewayMixin::class.java)
     .addMixIn(IpPermission::class.java, IpPermissionMixin::class.java)
+    .addMixIn(ModifyInstanceAttributeResult::class.java, ModifyInstanceAttributeResultMixin::class.java)
+    .addMixIn(ModifyVpcAttributeResult::class.java, ModifyVpcAttributeResultMixin::class.java)
     .addMixIn(ModifyVpcEndpointResult::class.java, ModifyVpcEndpointMixin::class.java)
     .addMixIn(PrefixList::class.java, PrefixListMixin::class.java)
+    .addMixIn(Reservation::class.java, ReservationMixin::class.java)
+    .addMixIn(RevokeSecurityGroupEgressResult::class.java, RevokeSecurityGroupEgressResultMixin::class.java)
+    .addMixIn(RouteTable::class.java, RouteTableMixin::class.java)
     .addMixIn(SecurityGroup::class.java, SecurityGroupMixin::class.java)
     .addMixIn(ServiceDetail::class.java, ServiceDetailMixin::class.java)
+    .addMixIn(Subnet::class.java, SubnetMixin::class.java)
+    .addMixIn(Vpc::class.java, VpcMixin::class.java)
     .addMixIn(VpcEndpoint::class.java, VpcEndpointMixin::class.java)
+    .addMixIn(ErrorResponse::class.java, ErrorResponseMixin::class.java)
+    .addMixIn(Error::class.java, ErrorMixin::class.java)
     as XmlMapper

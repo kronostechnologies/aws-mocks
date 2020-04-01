@@ -10,16 +10,20 @@ import com.fasterxml.jackson.databind.SerializerProvider
  */
 class ListItemSerializer : JsonSerializer<List<Any>>() {
     override fun serialize(values: List<Any>, jgen: JsonGenerator, provider: SerializerProvider) {
-        jgen.writeStartArray(values.size)
-        for (value in values) {
-            jgen.writeStartObject()
+        if (values.isNotEmpty()) {
+            jgen.writeStartArray(values.size)
+            for (value in values) {
+                jgen.writeStartObject()
 
-            val valueSerializer = provider.findValueSerializer(value.javaClass)
-            jgen.writeFieldName("item")
-            valueSerializer.serialize(value, jgen, provider)
+                val valueSerializer = provider.findValueSerializer(value.javaClass)
+                jgen.writeFieldName("item")
+                valueSerializer.serialize(value, jgen, provider)
 
-            jgen.writeEndObject()
+                jgen.writeEndObject()
+            }
+            jgen.writeEndArray()
+        } else {
+            jgen.writeString("") // Generates tag for empty list
         }
-        jgen.writeEndArray()
     }
 }
