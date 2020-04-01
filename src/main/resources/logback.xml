@@ -16,6 +16,7 @@
     <logger name="[Koin]" level="WARN"/>
 
     <logger name="acm" level="INFO"/>
+    <logger name="autoScaling" level="INFO"/>
     <logger name="cognito" level="INFO"/>
     <logger name="ec2" level="INFO"/>
     <logger name="kms" level="INFO"/>

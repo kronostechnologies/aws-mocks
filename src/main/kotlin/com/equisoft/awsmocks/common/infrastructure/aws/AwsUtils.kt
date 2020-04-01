@@ -4,6 +4,7 @@ package com.equisoft.awsmocks.common.infrastructure.aws
 
 enum class AwsService(private val serviceName: String) {
     ACM("acm"),
+    AUTOSCALING("autoscaling"),
     COGNITO("cognito"),
     EC2("ec2"),
     ECS("ecs"),

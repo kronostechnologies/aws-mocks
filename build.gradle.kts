@@ -46,6 +46,7 @@ dependencies {
 
     val awsSdkVersion = "1.11.746"
     implementation("com.amazonaws:aws-java-sdk-acm:$awsSdkVersion")
+    implementation("com.amazonaws:aws-java-sdk-autoscaling:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-cognitoidp:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-ec2:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-kms:$awsSdkVersion")
