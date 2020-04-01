@@ -16,11 +16,7 @@ class XmlRequestFactory(
         val klass: Class<*> = Class.forName("$rootPackage.$actionName")
 
         val request: AmazonWebServiceRequest = xmlMapper.readValue(content, klass) as AmazonWebServiceRequest
-
-        val accountId: String? = call.getAccountId()
-        if (accountId != null) {
-            request.accountId = accountId
-        }
+        request.parseAuthorization(call.request)
 
         return request
     }

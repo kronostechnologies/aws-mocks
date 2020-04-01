@@ -12,6 +12,7 @@ import com.equisoft.awsmocks.route53.infrastructure.persistence.HostedZoneReposi
 import com.equisoft.awsmocks.route53.infrastructure.persistence.RecordSetRepository
 
 class HostedZoneService(
+    private val delegationSetService: DelegationSetService,
     private val hostedZoneRepository: HostedZoneRepository,
     private val resourceTagsRepository: ResourceTagsRepository<Tag>,
     private val recordSetRepository: RecordSetRepository
@@ -20,7 +21,7 @@ class HostedZoneService(
         hostedZoneRepository[hostedZone.id] = hostedZone
     }
 
-    fun get(id: String): HostedZone = hostedZoneRepository[id] ?: throw NotFoundException()
+    fun get(id: String): HostedZone = hostedZoneRepository[id] ?: throw NotFoundException("NoSuchHostedZone")
 
     fun updateComment(request: UpdateHostedZoneCommentRequest): HostedZone = hostedZoneRepository[request.id]!!
         .also { it.config.comment = request.comment }
@@ -38,6 +39,8 @@ class HostedZoneService(
     fun getAll(): Collection<HostedZone> = hostedZoneRepository.values
 
     fun delete(id: String) {
+        val hostedZone = get(id)
+        delegationSetService.dissociate(hostedZone)
         hostedZoneRepository.remove(id)
     }
 

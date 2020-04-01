@@ -10,7 +10,7 @@ It uses [Localstack](https://github.com/localstack/localstack) to mock most serv
 ## Overview
 This is based on [Localstack default ports configuration](https://github.com/localstack/localstack#overview).  
 **From this project:**
-- Cognito-ido and Cognito Auth at http://localhost:4500
+- Cognito-idp and Cognito Auth at http://localhost:4500
 - ACM at http://localhost:4501
 - KMS at http://localhost:4502
 - EC2 at http://localhost:4503
@@ -64,6 +64,8 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [DescribeUserPoolClientRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPoolClient.html)  
 * [x] [DescribeUserPoolDomainRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPoolDomain.html)  
 * [x] [DescribeUserPoolRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_DescribeUserPool.html)  
+* [x] [GetUserPoolMfaConfigRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_GetUserPoolMfaConfig.html)  
+* [x] [SetUserPoolMfaConfigRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SetUserPoolMfaConfig.html)  
 * [x] [UpdateUserPoolClientRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UpdateUserPoolClient.html)  
 * [x] [UpdateUserPoolRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UpdateUserPool.html)  
 
@@ -92,12 +94,15 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [GetKeyRotationStatusRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_GetKeyRotationStatus.html)  
 * [x] [ListAliasesRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html)  
 * [x] [ListResourceTagsRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListResourceTags.html)  
+* [x] [TagResourceRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_TagResource.html)  
 * [x] [UpdateKeyDescriptionRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_UpdateKeyDescription.html)  
 
 ### Route53
 * [x] [ChangeResourceRecordSetsRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html)  
 * [x] [ChangeTagsForResourceRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeTagsForResource.html)  
 * [x] [CreateHostedZoneRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateHostedZone.html)  
+* [x] [CreateReusableDelegationSetRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateReusableDelegationSet.html)  
+* [x] [GetReusableDelegationSetRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetReusableDelegationSet.html)  
 * [x] [ListHostedZonesRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZones.html)  
 * [x] [ListResourceRecordSetsRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html)  
 * [x] [ListTagsForResourceRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTagsForResource.html)  

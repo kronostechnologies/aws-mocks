@@ -19,11 +19,7 @@ class JsonRequestFactory(
         val klass: Class<*> = Class.forName("$rootPackage.${actionName}Request")
 
         val request: AmazonWebServiceRequest = objectMapper.readValue(content, klass) as AmazonWebServiceRequest
-
-        val accountId: String? = call.getAccountId()
-        if (accountId != null) {
-            request.accountId = accountId
-        }
+        request.parseAuthorization(call.request)
 
         return request
     }

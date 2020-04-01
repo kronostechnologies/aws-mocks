@@ -24,3 +24,7 @@ out
 
 # Environment
 *.dev.conf
+
+# Terraform
+.terraform
+*.tfstate*

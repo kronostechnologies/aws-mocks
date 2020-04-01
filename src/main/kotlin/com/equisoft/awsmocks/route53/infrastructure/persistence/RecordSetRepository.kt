@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 class RecordSetRepository : ConcurrentMap<String, List<ResourceRecordSet>> by ConcurrentHashMap() {
+    @Synchronized
     fun addOrUpdate(key: String, value: ResourceRecordSet) {
         val records = getOrPut(key, { listOf() })
             .filter { it.name != value.name }
@@ -12,6 +13,7 @@ class RecordSetRepository : ConcurrentMap<String, List<ResourceRecordSet>> by Co
         put(key, records + value)
     }
 
+    @Synchronized
     fun remove(key: String, value: ResourceRecordSet) {
         val records = get(key)
         if (records != null) {

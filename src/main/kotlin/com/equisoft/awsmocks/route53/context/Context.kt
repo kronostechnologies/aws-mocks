@@ -2,6 +2,7 @@
 
 package com.equisoft.awsmocks.route53.context
 
+import com.amazonaws.services.route53.model.DelegationSet
 import com.amazonaws.services.route53.model.ListHostedZonesResult
 import com.amazonaws.services.route53.model.ListResourceRecordSetsResult
 import com.amazonaws.services.route53.model.ResourceRecordSet
@@ -13,10 +14,14 @@ import com.equisoft.awsmocks.common.context.objectMapper
 import com.equisoft.awsmocks.common.context.xmlMapper
 import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepository
 import com.equisoft.awsmocks.common.interfaces.http.XmlRequestFactory
+import com.equisoft.awsmocks.route53.application.DelegationSetService
 import com.equisoft.awsmocks.route53.application.HostedZoneService
 import com.equisoft.awsmocks.route53.application.Route53RequestHandler
+import com.equisoft.awsmocks.route53.infrastructure.persistence.DelegationSetAssociationRepository
+import com.equisoft.awsmocks.route53.infrastructure.persistence.DelegationSetRepository
 import com.equisoft.awsmocks.route53.infrastructure.persistence.HostedZoneRepository
 import com.equisoft.awsmocks.route53.infrastructure.persistence.RecordSetRepository
+import com.equisoft.awsmocks.route53.interfaces.http.serialization.jackson.model.DelegationSetMixin
 import com.equisoft.awsmocks.route53.interfaces.http.serialization.jackson.model.ListHostedZonesMixin
 import com.equisoft.awsmocks.route53.interfaces.http.serialization.jackson.model.ListResourceRecordSetsMixin
 import com.equisoft.awsmocks.route53.interfaces.http.serialization.jackson.model.ResourceRecordSetMixin
@@ -29,13 +34,16 @@ fun route53modules(): List<Module> {
     return listOf(module {
         single(createdAtStart = true) { Route53Bootstrapper(get(), get()) }
 
-        single { HostedZoneService(get(), get(), get()) }
+        single { DelegationSetService(get(), get()) }
+        single { HostedZoneService(get(), get(), get(), get()) }
 
-        single { ResourceTagsRepository<Tag> { value } }
+        single { DelegationSetRepository() }
+        single { DelegationSetAssociationRepository() }
         single { HostedZoneRepository() }
         single { RecordSetRepository() }
+        single { ResourceTagsRepository<Tag> { value } }
 
-        single { Route53RequestHandler(get()) }
+        single { Route53RequestHandler(get(), get()) }
         single { XmlRequestFactory(get(), "com.amazonaws.services.route53.model") }
 
         single { xmlMapper().addMixIns() }
@@ -43,8 +51,10 @@ fun route53modules(): List<Module> {
     }, contentConvertersModule(), configModule())
 }
 
-private fun XmlMapper.addMixIns(): XmlMapper = addMixIn(ResourceTagSet::class.java, ResourceTagSetMixin::class.java)
+private fun XmlMapper.addMixIns(): XmlMapper = this
+    .addMixIn(DelegationSet::class.java, DelegationSetMixin::class.java)
     .addMixIn(ListHostedZonesResult::class.java, ListHostedZonesMixin::class.java)
     .addMixIn(ListResourceRecordSetsResult::class.java, ListResourceRecordSetsMixin::class.java)
     .addMixIn(ResourceRecordSet::class.java, ResourceRecordSetMixin::class.java)
+    .addMixIn(ResourceTagSet::class.java, ResourceTagSetMixin::class.java)
     as XmlMapper

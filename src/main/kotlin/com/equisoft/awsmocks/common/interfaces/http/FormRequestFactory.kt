@@ -4,7 +4,7 @@ import com.amazonaws.AmazonWebServiceRequest
 import io.ktor.application.ApplicationCall
 import io.ktor.application.log
 import io.ktor.http.Parameters
-import io.ktor.request.receive
+import io.ktor.request.receiveParameters
 import io.ktor.util.StringValues
 import io.ktor.util.filter
 import io.ktor.util.flattenEntries
@@ -20,16 +20,13 @@ class FormRequestFactory(
     private val rootPackage: String
 ) {
     suspend fun create(call: ApplicationCall): AmazonWebServiceRequest {
-        val parameters: Parameters = call.receive<Parameters>().also { logRequest(call, it) }
+        val parameters: Parameters = call.receiveParameters().also { logRequest(call, it) }
         val actionName: String = checkNotNull(parameters[ACTION_NAME_PARAM])
         val klass: Class<*> = Class.forName("$rootPackage.${actionName}Request")
 
-        val request: AmazonWebServiceRequest = klass.newInstance() as AmazonWebServiceRequest
+        val request: AmazonWebServiceRequest = klass.getDeclaredConstructor().newInstance() as AmazonWebServiceRequest
 
-        val accountId: String? = call.getAccountId()
-        if (accountId != null) {
-            request.accountId = accountId
-        }
+        request.parseAuthorization(call.request)
 
         return parametersDeserializer.addParameters(parameters, request)
     }

@@ -15,7 +15,7 @@
     <logger name="ktor" level="INFO"/>
     <logger name="com.equisoft" level="TRACE"/>
     <logger name="org.hibernate.validator" level="ERROR"/>
-    <logger name="Koin" level="WARN"/>
+    <logger name="[Koin]" level="WARN"/>
 
     <logger name="acm" level="INFO"/>
     <logger name="cognito" level="INFO"/>

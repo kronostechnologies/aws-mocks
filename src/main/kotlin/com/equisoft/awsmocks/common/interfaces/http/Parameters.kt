@@ -3,21 +3,39 @@
 package com.equisoft.awsmocks.common.interfaces.http
 
 import com.amazonaws.AmazonWebServiceRequest
+import com.equisoft.awsmocks.common.context.AwsEnvironment
+import com.equisoft.awsmocks.common.context.applicationConfig
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpHeaders
+import io.ktor.request.ApplicationRequest
 import io.ktor.util.pipeline.PipelineContext
 
-const val AwsAccountId = "AwsAccountId"
+private const val AwsRegion = "AwsRegion"
+private const val MIN_EXPECTED_PARAMETERS = 5
 
 fun PipelineContext<Unit, ApplicationCall>.getIdParameter(): String = call.parameters["id"]!!
 
-fun ApplicationCall.getAccountId(): String? = request.headers[HttpHeaders.Authorization]
-    ?.substringAfter("Credential=")
-    ?.substringBefore("/")
+fun AmazonWebServiceRequest.parseAuthorization(request: ApplicationRequest) {
+    val values: List<String>? = request.headers[HttpHeaders.Authorization]
+        ?.substringAfter("Credential=")
+        ?.substringBefore(",")
+        ?.split("/")
 
-var AmazonWebServiceRequest.accountId: String?
-    get() = customRequestHeaders[AwsAccountId]
+    if (values != null) {
+        if (values.size < MIN_EXPECTED_PARAMETERS) {
+            throw IllegalArgumentException("Unexpected Credentials length")
+        }
+
+        region = values[2]
+    }
+}
+
+val AmazonWebServiceRequest.accountId: String
+    get() = applicationConfig[AwsEnvironment.accountId]
+
+var AmazonWebServiceRequest.region: String?
+    get() = customRequestHeaders[AwsRegion]
     set(value) {
-        putCustomRequestHeader(AwsAccountId, value)
+        putCustomRequestHeader(AwsRegion, value)
     }
