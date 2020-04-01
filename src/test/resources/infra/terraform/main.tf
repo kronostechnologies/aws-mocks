@@ -8,6 +8,7 @@ provider "aws" {
         autoscaling = "http://${var.hostname}:4506"
         cognitoidp = "http://${var.hostname}:4500"
         ec2 = "http://${var.hostname}:4503"
+        elb = "http://${var.hostname}:4505"
         kms = "http://${var.hostname}:4502"
         route53 = "http://${var.hostname}:4580"
     }
@@ -26,6 +27,14 @@ module "autoscaling" {
 
 module "ec2" {
     source = "./ec2"
+}
+
+module "elb" {
+    source = "./elb"
+
+    security_group = module.ec2.security_group
+    subnet = module.ec2.subnet
+    vpc = module.ec2.vpc
 }
 
 module "kms" {

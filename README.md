@@ -122,6 +122,24 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [RunInstancesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html)  
 * [x] [TerminateInstancesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_TerminateInstances.html)  
 
+### ELB
+* [x] [AddTagsRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_AddTags.html)  
+* [x] [CreateListenerRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_CreateListener.html)  
+* [x] [CreateLoadBalancerRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_CreateLoadBalancer.html)  
+* [x] [CreateRuleRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_CreateRule.html)  
+* [x] [CreateTargetGroupRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_CreateTargetGroup.html)  
+* [x] [DescribeListenersRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeListeners.html)  
+* [x] [DescribeLoadBalancerAttributesRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancerAttributes.html)  
+* [x] [DescribeLoadBalancersRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html)  
+* [x] [DescribeRulesRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeRules.html)  
+* [x] [DescribeTargetGroupAttributesRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTargetGroupAttributes.html)  
+* [x] [DescribeTagsRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTags.html)  
+* [x] [DescribeTargetGroupsRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTargetGroups.html)  
+* [x] [ModifyLoadBalancerAttributesRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_ModifyLoadBalancerAttributes.html)  
+* [x] [ModifyTargetGroupAttributesRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_ModifyTargetGroupAttributes.html)  
+* [x] [ModifyTargetGroupRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_ModifyTargetGroup.html)  
+* [x] [SetSecurityGroupsRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_SetSecurityGroups.html)  
+
 ### KMS
 * [x] [CreateAliasRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateAlias.html)  
 * [x] [CreateKeyRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html)  
