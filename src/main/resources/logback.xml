@@ -19,6 +19,7 @@
     <logger name="autoScaling" level="INFO"/>
     <logger name="cognito" level="INFO"/>
     <logger name="ec2" level="INFO"/>
+    <logger name="ecs" level="INFO"/>
     <logger name="elb" level="INFO"/>
     <logger name="kms" level="INFO"/>
     <logger name="route53" level="INFO"/>

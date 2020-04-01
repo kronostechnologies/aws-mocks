@@ -36,13 +36,14 @@ private fun loadConfig(): Config = Config {
     .from.env()
 
 object PortsEnvironment : ConfigSpec("ports") {
-    val cognito by optional(DefaultPorts.COGNITO)
     val acm by optional(DefaultPorts.ACM)
     val autoScaling by optional(DefaultPorts.AUTOSCALING)
+    val cognito by optional(DefaultPorts.COGNITO)
     val kms by optional(DefaultPorts.KMS)
     val ec2 by optional(DefaultPorts.EC2)
-    val route53 by optional(DefaultPorts.ROUTE53)
+    val ecs by optional(DefaultPorts.ECS)
     val elb by optional(DefaultPorts.ELB)
+    val route53 by optional(DefaultPorts.ROUTE53)
 }
 
 object Route53Environment : ConfigSpec("route53") {

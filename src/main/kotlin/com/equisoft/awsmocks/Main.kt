@@ -6,8 +6,9 @@ import com.equisoft.awsmocks.cognito.cognito
 import com.equisoft.awsmocks.common.context.PortsEnvironment
 import com.equisoft.awsmocks.common.context.applicationConfig
 import com.equisoft.awsmocks.ec2.ec2
-import com.equisoft.awsmocks.kms.kms
+import com.equisoft.awsmocks.ecs.ecs
 import com.equisoft.awsmocks.elb.elb
+import com.equisoft.awsmocks.kms.kms
 import com.equisoft.awsmocks.route53.route53
 import io.ktor.application.Application
 import io.ktor.server.engine.applicationEngineEnvironment
@@ -29,6 +30,7 @@ fun main() {
             Application::cognito to applicationConfig[PortsEnvironment.cognito],
             Application::kms to applicationConfig[PortsEnvironment.kms],
             Application::ec2 to applicationConfig[PortsEnvironment.ec2],
+            Application::ecs to applicationConfig[PortsEnvironment.ecs],
             Application::elb to applicationConfig[PortsEnvironment.elb],
             Application::route53 to applicationConfig[PortsEnvironment.route53]
         ).map {
