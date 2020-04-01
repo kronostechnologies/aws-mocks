@@ -3,7 +3,7 @@ package com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model
 import com.amazonaws.services.ec2.model.IpRange
 import com.amazonaws.services.ec2.model.PrefixListId
 import com.amazonaws.services.ec2.model.UserIdGroupPair
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.ListItem
+import com.equisoft.awsmocks.common.interfaces.http.serialization.jackson.ListItem
 
 interface IpPermissionMixin {
     @ListItem("ipRanges")

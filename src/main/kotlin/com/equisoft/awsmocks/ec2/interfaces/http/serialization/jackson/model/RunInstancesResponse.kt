@@ -5,7 +5,7 @@ import com.amazonaws.ResponseMetadata
 import com.amazonaws.services.ec2.model.GroupIdentifier
 import com.amazonaws.services.ec2.model.Instance
 import com.amazonaws.services.ec2.model.Reservation
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.ListItem
+import com.equisoft.awsmocks.common.interfaces.http.serialization.jackson.ListItem
 import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "RunInstancesResponse")

@@ -1,4 +1,4 @@
-package com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson
+package com.equisoft.awsmocks.common.interfaces.http.serialization.jackson
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer

@@ -6,14 +6,13 @@ import com.equisoft.awsmocks.common.context.objectMapper
 import com.equisoft.awsmocks.common.context.xmlMapper
 import com.equisoft.awsmocks.common.exceptions.Error
 import com.equisoft.awsmocks.common.exceptions.ErrorResponse
-import com.equisoft.awsmocks.common.infrastructure.persistence.Repository
 import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepository
 import com.equisoft.awsmocks.common.interfaces.http.FormRequestFactory
 import com.equisoft.awsmocks.common.interfaces.http.ParametersDeserializer
 import com.equisoft.awsmocks.ec2.application.*
 import com.equisoft.awsmocks.ec2.infrastructure.persistence.*
 import com.equisoft.awsmocks.ec2.interfaces.http.Ec2ParametersDeserializer
-import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.CustomJacksonAnnotationIntrospector
+import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.Ec2JacksonAnnotationIntrospector
 import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.*
 import com.fasterxml.jackson.databind.AnnotationIntrospector
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -39,22 +38,24 @@ fun ec2Modules(): List<Module> {
         single { VpcService(get(), get(), get()) }
         single { VpcEndpointService(get(), get(), get()) }
 
-        single { InstanceRepository() } bind Repository::class
-        single { InternetGatewayRepository() } bind Repository::class
-        single { ReservationRepository() } bind Repository::class
+        single { InstanceRepository() } bind Ec2Repository::class
+        single { InternetGatewayRepository() } bind Ec2Repository::class
+        single { ReservationRepository() } bind Ec2Repository::class
         single { ResourceTagsRepository<Tag> { value } }
-        single { RouteTableRepository() } bind Repository::class
-        single { SecurityGroupRepository() } bind Repository::class
+        single { RouteTableRepository() } bind Ec2Repository::class
+        single { SecurityGroupRepository() } bind Ec2Repository::class
         single { ServiceDetailRepository() }
-        single { SubnetRepository() } bind Repository::class
-        single { VolumeRepository() } bind Repository::class
-        single { VpcRepository() } bind Repository::class
+        single { SubnetRepository() } bind Ec2Repository::class
+        single { VolumeRepository() } bind Ec2Repository::class
+        single { VpcRepository() } bind Ec2Repository::class
         single { VpcAttributesRepository() }
-        single { VpcEndpointRepository() } bind Repository::class
+        single { VpcEndpointRepository() } bind Ec2Repository::class
 
         single { ResourcesRepository(getAll()) }
 
-        single { Ec2RequestHandler(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+        single {
+            Ec2RequestHandler(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+        }
 
         single<ParametersDeserializer> { Ec2ParametersDeserializer() }
         single { FormRequestFactory(get(), "com.amazonaws.services.ec2.model") }
@@ -64,7 +65,7 @@ fun ec2Modules(): List<Module> {
                 .addMixIns()
                 .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
                 .setAnnotationIntrospector(AnnotationIntrospector.pair(
-                    CustomJacksonAnnotationIntrospector(), JaxbAnnotationIntrospector(TypeFactory.defaultInstance()))
+                    Ec2JacksonAnnotationIntrospector(), JaxbAnnotationIntrospector(TypeFactory.defaultInstance()))
                 ) as XmlMapper
         }
         single { objectMapper() }
