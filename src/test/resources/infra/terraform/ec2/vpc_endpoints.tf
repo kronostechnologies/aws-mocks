@@ -3,7 +3,7 @@ data "aws_vpc_endpoint_service" "dynamo" {
 }
 
 resource "aws_vpc_endpoint" "dynamo" {
-    count = 2
+    count = 40
     service_name = data.aws_vpc_endpoint_service.dynamo.service_name
     vpc_id = aws_vpc.main.id
 

@@ -14,9 +14,7 @@ resource "aws_launch_configuration" "main" {
     instance_type = "t3a.nano"
     security_groups = var.security_group_ids_for_ec2_instances
     iam_instance_profile = "${local.hyphenized_name}-ecs-role"
-    user_data_base64 = base64encode(templatefile("${path.module}/ecs-user-data.sh", {
-        cluster_name = aws_ecs_cluster.cluster.name
-    }))
+    user_data_base64 = base64encode("some template")
 
     lifecycle {
         create_before_destroy = true

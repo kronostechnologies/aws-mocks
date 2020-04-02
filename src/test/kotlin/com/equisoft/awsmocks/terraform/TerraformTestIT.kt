@@ -2,7 +2,7 @@ package com.equisoft.awsmocks.terraform
 
 import com.equisoft.awsmocks.main
 import com.equisoft.awsmocks.testutils.StdPrinter
-import com.equisoft.awsmocks.testutils.WaitForContainerExit
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Tag
@@ -26,7 +26,6 @@ class TerraformTestIT {
 
         val workingDirectory = "/app/infra"
         terraform.withCreateContainerCmdModifier { it.withEntrypoint("./provision.sh") }
-            .waitingFor(WaitForContainerExit(terraform))
             .withWorkingDirectory(workingDirectory)
             .withCopyFileToContainer(MountableFile.forClasspathResource("infra", 777), workingDirectory)
             .withLogConsumer(StdPrinter())
@@ -35,6 +34,9 @@ class TerraformTestIT {
     @Test
     fun `should provision with terraform`() {
         terraform.start()
+        runBlocking {
+            terraform.waitForApply()
+        }
     }
 
     @AfterAll
