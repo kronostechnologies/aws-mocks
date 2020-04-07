@@ -81,6 +81,10 @@ class Ec2ParametersDeserializer : ParametersDeserializer {
             is DescribeAccountAttributesRequest -> {
                 request.withAttributeNames(parameters.toList("AttributeName"))
             }
+            is DescribeAvailabilityZonesRequest -> {
+                request.withAllAvailabilityZones(parameters["AllAvailabilityZones"]?.toBoolean())
+                    .withFilters(parameters.getFilters())
+            }
             is DescribeImagesRequest -> {
                 request.withFilters(parameters.getFilters())
                     .withOwners(parameters.toList("Owner"))

@@ -96,6 +96,7 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [CreateVpcEndpointRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpcEndpoint.html)  
 * [x] [CreateVpcRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpc.html)  
 * [x] [DescribeAccountAttributesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeAccountAttributes.html)  
+* [x] [DescribeAvailabilityZonesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeAvailabilityZones.html)  
 * [x] [DescribeImagesRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html)  
 * [x] [DescribeInstanceAttributeRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstanceAttribute.html)  
 * [x] [DescribeInstanceCreditSpecificationsRequest](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstanceCreditSpecifications.html)  

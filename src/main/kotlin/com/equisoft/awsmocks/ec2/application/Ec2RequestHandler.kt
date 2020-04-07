@@ -7,6 +7,7 @@ import com.amazonaws.services.ec2.model.*
 import com.equisoft.awsmocks.common.infrastructure.aws.AwsService.EC2
 import com.equisoft.awsmocks.common.infrastructure.aws.readResource
 import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepository
+import com.equisoft.awsmocks.common.interfaces.http.region
 import com.equisoft.awsmocks.ec2.domain.InstanceStateCodes.Companion.RUNNING
 import com.equisoft.awsmocks.ec2.domain.InstanceStateCodes.Companion.SHUTTING_DOWN
 import com.equisoft.awsmocks.ec2.domain.filter
@@ -19,6 +20,7 @@ import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.Ter
 
 @SuppressWarnings("LongMethod")
 class Ec2RequestHandler(
+    private val availabilityZoneService: AvailabilityZoneService,
     private val instanceService: InstanceService,
     private val internetGatewayService: InternetGatewayService,
     private val reservationService: ReservationService,
@@ -109,6 +111,9 @@ class Ec2RequestHandler(
                     .withAttributeValues(AccountAttributeValue().withAttributeValue("VPC"))
 
                 DescribeAccountAttributesResult().withAccountAttributes(attribute)
+            }
+            is DescribeAvailabilityZonesRequest -> {
+                availabilityZoneService.getAll(request.region!!)
             }
             is DescribeImagesRequest -> {
                 readResource<DescribeImagesResult>(EC2).filter(request.filters)

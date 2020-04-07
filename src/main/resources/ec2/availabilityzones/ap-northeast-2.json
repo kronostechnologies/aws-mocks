@@ -1,0 +1,25 @@
+{
+  "AvailabilityZones": [
+    {
+      "State": "available",
+      "Messages": [],
+      "RegionName": "ap-northeast-2",
+      "ZoneName": "ap-northeast-2a",
+      "ZoneId": "apne2-az1"
+    },
+    {
+      "State": "available",
+      "Messages": [],
+      "RegionName": "ap-northeast-2",
+      "ZoneName": "ap-northeast-2b",
+      "ZoneId": "apne2-az2"
+    },
+    {
+      "State": "available",
+      "Messages": [],
+      "RegionName": "ap-northeast-2",
+      "ZoneName": "ap-northeast-2c",
+      "ZoneId": "apne2-az3"
+    }
+  ]
+}

@@ -1,3 +1,3 @@
 package com.equisoft.awsmocks.common.exceptions
 
-class BadRequestException(val errorCode: String? = null) : Exception()
+class BadRequestException(val errorCode: String? = null) : Exception(errorCode)

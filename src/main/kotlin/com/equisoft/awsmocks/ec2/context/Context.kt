@@ -28,6 +28,7 @@ fun ec2Modules(): List<Module> {
     return listOf(module {
         single(createdAtStart = true) { Ec2Bootstrapper(get(), get()) }
 
+        single { AvailabilityZoneService() }
         single { InstanceService(get(), get(), get()) }
         single { InternetGatewayService(get(), get(), get()) }
         single { ReservationService(get(), get(), get(), get(), get()) }
@@ -54,7 +55,7 @@ fun ec2Modules(): List<Module> {
         single { ResourcesRepository(getAll()) }
 
         single {
-            Ec2RequestHandler(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+            Ec2RequestHandler(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
         }
 
         single<ParametersDeserializer> { Ec2ParametersDeserializer() }
@@ -84,6 +85,7 @@ private fun XmlMapper.addMixIns(): XmlMapper = this
     .addMixIn(CreateSubnetResult::class.java, CreateSubnetResultMixin::class.java)
     .addMixIn(CreateVpcResult::class.java, CreateVpcResultMixin::class.java)
     .addMixIn(DescribeAccountAttributesResult::class.java, DescribeAccountAttributesMixin::class.java)
+    .addMixIn(DescribeAvailabilityZonesResult::class.java, DescribeAvailabilityZonesResultMixin::class.java)
     .addMixIn(DescribeInstanceCreditSpecificationsResult::class.java,
         DescribeInstanceCreditSpecificationsResultMixin::class.java)
     .addMixIn(DescribeImagesResult::class.java, DescribeImagesResultMixin::class.java)
