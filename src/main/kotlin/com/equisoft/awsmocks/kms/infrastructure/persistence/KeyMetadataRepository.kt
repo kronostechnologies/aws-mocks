@@ -4,4 +4,7 @@ import com.amazonaws.services.kms.model.KeyMetadata
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class KeyMetadataRepository : ConcurrentMap<String, KeyMetadata> by ConcurrentHashMap()
+class KeyMetadataRepository : ConcurrentMap<String, KeyMetadata> by ConcurrentHashMap() {
+    @Synchronized
+    fun findByArn(keyArn: String): KeyMetadata? = values.find { it.arn == keyArn }
+}

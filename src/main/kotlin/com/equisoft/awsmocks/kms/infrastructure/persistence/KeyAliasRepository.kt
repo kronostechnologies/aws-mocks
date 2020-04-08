@@ -10,4 +10,7 @@ class KeyAliasRepository : ConcurrentMap<String, AliasListEntry> by ConcurrentHa
 
     @Synchronized
     fun getAll(): List<AliasListEntry> = values.toList()
+
+    @Synchronized
+    fun findByArn(aliasArn: String): AliasListEntry? = values.find { it.aliasArn == aliasArn }
 }

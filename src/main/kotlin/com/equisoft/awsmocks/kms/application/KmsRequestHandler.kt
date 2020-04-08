@@ -3,29 +3,7 @@ package com.equisoft.awsmocks.kms.application
 import com.amazonaws.AmazonWebServiceRequest
 import com.amazonaws.AmazonWebServiceResult
 import com.amazonaws.ResponseMetadata
-import com.amazonaws.services.kms.model.AliasListEntry
-import com.amazonaws.services.kms.model.CreateAliasRequest
-import com.amazonaws.services.kms.model.CreateAliasResult
-import com.amazonaws.services.kms.model.CreateKeyRequest
-import com.amazonaws.services.kms.model.CreateKeyResult
-import com.amazonaws.services.kms.model.DeleteAliasRequest
-import com.amazonaws.services.kms.model.DeleteAliasResult
-import com.amazonaws.services.kms.model.DescribeKeyRequest
-import com.amazonaws.services.kms.model.DescribeKeyResult
-import com.amazonaws.services.kms.model.GetKeyPolicyRequest
-import com.amazonaws.services.kms.model.GetKeyPolicyResult
-import com.amazonaws.services.kms.model.GetKeyRotationStatusRequest
-import com.amazonaws.services.kms.model.GetKeyRotationStatusResult
-import com.amazonaws.services.kms.model.KeyMetadata
-import com.amazonaws.services.kms.model.ListAliasesRequest
-import com.amazonaws.services.kms.model.ListAliasesResult
-import com.amazonaws.services.kms.model.ListResourceTagsRequest
-import com.amazonaws.services.kms.model.ListResourceTagsResult
-import com.amazonaws.services.kms.model.Tag
-import com.amazonaws.services.kms.model.TagResourceRequest
-import com.amazonaws.services.kms.model.TagResourceResult
-import com.amazonaws.services.kms.model.UpdateKeyDescriptionRequest
-import com.amazonaws.services.kms.model.UpdateKeyDescriptionResult
+import com.amazonaws.services.kms.model.*
 
 @SuppressWarnings("LongMethod")
 class KmsRequestHandler(private val keyService: KeyService) {
@@ -51,6 +29,11 @@ class KmsRequestHandler(private val keyService: KeyService) {
                 val key: KeyMetadata = keyService.get(request.keyId)
 
                 DescribeKeyResult().withKeyMetadata(key)
+            }
+            is EncryptRequest -> {
+                val cipherText = keyService.encryptText(request.keyId, request.plaintext.asReadOnlyBuffer())
+
+                EncryptResult().withCiphertextBlob(cipherText)
             }
             is GetKeyPolicyRequest -> {
                 GetKeyPolicyResult().withPolicy(defaultPolicy(request))

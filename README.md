@@ -154,6 +154,7 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [CreateKeyRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html)  
 * [x] [DeleteAliasRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_DeleteAlias.html)  
 * [x] [DescribeKeyRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html)  
+* [x] [EncryptRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html)  
 * [x] [GetKeyPolicyRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_GetKeyPolicy.html)  
 * [x] [GetKeyRotationStatusRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_GetKeyRotationStatus.html)  
 * [x] [ListAliasesRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html)  

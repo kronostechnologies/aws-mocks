@@ -7,6 +7,9 @@ import com.equisoft.awsmocks.common.exceptions.NotFoundException
 import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepository
 import com.equisoft.awsmocks.kms.infrastructure.persistence.KeyAliasRepository
 import com.equisoft.awsmocks.kms.infrastructure.persistence.KeyMetadataRepository
+import java.nio.ByteBuffer
+import java.nio.charset.StandardCharsets
+import java.util.Base64
 
 class KeyService(
     private val keyMetadataRepository: KeyMetadataRepository,
@@ -54,5 +57,31 @@ class KeyService(
 
         val key: KeyMetadata = get(id)
         return keyAliasRepository.getByKeyId(key.keyId)
+    }
+
+    fun getByArn(keyArn: String): KeyMetadata =
+        keyMetadataRepository.findByArn(keyArn) ?: throw NotFoundException()
+
+    fun getByAlias(aliasName: String): KeyMetadata {
+        val alias: AliasListEntry = keyAliasRepository[aliasName] ?: throw NotFoundException()
+        return get(alias.targetKeyId)
+    }
+
+    fun getByAliasArn(aliasArn: String): KeyMetadata {
+        val alias: AliasListEntry = keyAliasRepository.findByArn(aliasArn) ?: throw NotFoundException()
+        return get(alias.targetKeyId)
+    }
+
+    fun encryptText(keyId: String, plainTextBuffer: ByteBuffer): ByteBuffer? {
+        val key: KeyMetadata = when {
+            keyId.startsWith("alias") -> getByAlias(keyId)
+            keyId.contains(":alias/") -> getByAliasArn(keyId)
+            keyId.contains(":key/") -> getByArn(keyId)
+            else -> get(keyId)
+        }
+
+        val text = StandardCharsets.UTF_8.decode(plainTextBuffer).toString()
+        val encodedBytes: ByteArray = Base64.getEncoder().encode("${key.keyId}$text".toByteArray())
+        return ByteBuffer.wrap(encodedBytes)
     }
 }
