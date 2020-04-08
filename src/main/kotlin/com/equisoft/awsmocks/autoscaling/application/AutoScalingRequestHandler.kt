@@ -4,13 +4,16 @@ import com.amazonaws.AmazonWebServiceRequest
 import com.amazonaws.AmazonWebServiceResult
 import com.amazonaws.ResponseMetadata
 import com.amazonaws.services.autoscaling.model.*
+import com.equisoft.awsmocks.autoscaling.infrastructure.persistence.NotificationConfigurationRepository
 import com.equisoft.awsmocks.autoscaling.interfaces.http.serialization.jackson.model.DescribeAutoScalingGroupsResponse
 import com.equisoft.awsmocks.autoscaling.interfaces.http.serialization.jackson.model.DescribeLaunchConfigurationsResponse
+import com.equisoft.awsmocks.autoscaling.interfaces.http.serialization.jackson.model.DescribeNotificationConfigurationsResponse
 
 @SuppressWarnings("LongMethod")
 class AutoScalingRequestHandler(
     private val autoScalingGroupService: AutoScalingGroupService,
-    private val launchConfigurationService: LaunchConfigurationService
+    private val launchConfigurationService: LaunchConfigurationService,
+    private val notificationConfigurationRepository: NotificationConfigurationRepository
 ) {
     fun handle(request: AmazonWebServiceRequest): AmazonWebServiceResult<ResponseMetadata> =
         when (request) {
@@ -51,6 +54,22 @@ class AutoScalingRequestHandler(
                 DescribeLaunchConfigurationsResponse(
                     DescribeLaunchConfigurationsResult().withLaunchConfigurations(launchConfigurations)
                 )
+            }
+            is DescribeNotificationConfigurationsRequest -> {
+                val notificationConfigurations: List<NotificationConfiguration> =
+                    notificationConfigurationRepository.findAll(request.autoScalingGroupNames)
+
+                DescribeNotificationConfigurationsResponse(
+                    DescribeNotificationConfigurationsResult()
+                        .withNotificationConfigurations(notificationConfigurations)
+                )
+            }
+            is PutNotificationConfigurationRequest -> {
+                val notificationConfigurations: List<NotificationConfiguration> =
+                    createNotificationConfigurationsFromRequest(request)
+                notificationConfigurationRepository.addAll(notificationConfigurations)
+
+                PutNotificationConfigurationResult()
             }
             else -> throw IllegalArgumentException(request::class.qualifiedName)
         }

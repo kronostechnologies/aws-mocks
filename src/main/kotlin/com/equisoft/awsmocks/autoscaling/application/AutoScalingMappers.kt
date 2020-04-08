@@ -1,12 +1,6 @@
 package com.equisoft.awsmocks.autoscaling.application
 
-import com.amazonaws.services.autoscaling.model.AutoScalingGroup
-import com.amazonaws.services.autoscaling.model.CreateAutoScalingGroupRequest
-import com.amazonaws.services.autoscaling.model.CreateLaunchConfigurationRequest
-import com.amazonaws.services.autoscaling.model.Instance
-import com.amazonaws.services.autoscaling.model.LaunchConfiguration
-import com.amazonaws.services.autoscaling.model.LifecycleState
-import com.amazonaws.services.autoscaling.model.TagDescription
+import com.amazonaws.services.autoscaling.model.*
 import com.equisoft.awsmocks.common.infrastructure.aws.AwsService.AUTOSCALING
 import com.equisoft.awsmocks.common.interfaces.http.accountId
 import com.equisoft.awsmocks.common.interfaces.http.region
@@ -75,3 +69,11 @@ fun createAutoScalingGroupFromRequest(request: CreateAutoScalingGroupRequest): A
     })
     .withTerminationPolicies(request.terminationPolicies)
     .withVPCZoneIdentifier(request.vpcZoneIdentifier?.trim(','))
+
+fun createNotificationConfigurationsFromRequest(
+    request: PutNotificationConfigurationRequest
+): List<NotificationConfiguration> = request.notificationTypes.map {
+    NotificationConfiguration().withAutoScalingGroupName(request.autoScalingGroupName)
+        .withNotificationType(it)
+        .withTopicARN(request.topicARN)
+}

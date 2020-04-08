@@ -68,6 +68,14 @@ class AutoScalingParametersDeserializer : ParametersDeserializer {
             is DescribeLaunchConfigurationsRequest -> {
                 request.withLaunchConfigurationNames(parameters.toList("LaunchConfigurationNames.member"))
             }
+            is DescribeNotificationConfigurationsRequest -> {
+                request.withAutoScalingGroupNames(parameters.toList("AutoScalingGroupNames.member"))
+            }
+            is PutNotificationConfigurationRequest -> {
+                request.withAutoScalingGroupName(parameters["AutoScalingGroupName"])
+                    .withNotificationTypes(parameters.toList("NotificationTypes.member"))
+                    .withTopicARN(parameters["TopicARN"])
+            }
             else -> request
         }
 

@@ -61,6 +61,8 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [DescribeAutoScalingGroupsRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeAutoScalingGroups.html)  
 * [x] [DeleteLaunchConfigurationRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DeleteLaunchConfiguration.html)  
 * [x] [DescribeLaunchConfigurationsRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeLaunchConfigurations.html)  
+* [x] [DescribeNotificationConfigurationsRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeNotificationConfigurations.html)  
+* [x] [PutNotificationConfigurationRequest](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_PutNotificationConfiguration.html)  
 
 ### Cognito-idp
 * [x] [CreateResourceServerRequest](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateResourceServer.html)  
