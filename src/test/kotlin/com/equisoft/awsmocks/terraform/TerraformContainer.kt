@@ -5,6 +5,7 @@ import com.github.dockerjava.api.model.HostConfig
 import kotlinx.coroutines.delay
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.output.OutputFrame
+import java.net.InetAddress
 import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
 
@@ -13,7 +14,7 @@ private val TERRAFORM_VERSION: String = System.getenv("TERRAFORM_VERSION") ?: "0
 
 class TerraformContainer : GenericContainer<TerraformContainer>("hashicorp/terraform:$TERRAFORM_VERSION") {
     init {
-        withEnv("TF_VAR_hostname", "host.docker.internal")
+        withEnv("TF_VAR_hostname", InetAddress.getLocalHost().hostAddress)
             .withCommand("apply -auto-approve")
             .withCreateContainerCmdModifier {
                 val hostConfig: HostConfig = it.hostConfig ?: HostConfig.newHostConfig()
