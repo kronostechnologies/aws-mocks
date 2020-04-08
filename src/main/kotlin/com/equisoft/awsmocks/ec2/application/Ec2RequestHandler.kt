@@ -257,12 +257,13 @@ class Ec2RequestHandler(
                 ModifyVpcAttributeResult()
             }
             is ModifyVpcEndpointRequest -> {
-                vpcEndpointService.updatePolicyDocument(request.vpcEndpointId, request.policyDocument)
-                vpcEndpointService.updateRouteTable(request.vpcEndpointId, request.addRouteTableIds,
-                    request.removeRouteTableIds)
-                vpcEndpointService.updateSecurityGroups(request.vpcEndpointId, request.addSecurityGroupIds,
-                    request.removeSecurityGroupIds)
-                vpcEndpointService.updateSubnets(request.vpcEndpointId, request.addSubnetIds, request.removeSubnetIds)
+                vpcEndpointService.update(
+                    request.vpcEndpointId,
+                    request.policyDocument,
+                    request.addRouteTableIds, request.removeRouteTableIds,
+                    request.addSecurityGroupIds, request.removeSecurityGroupIds,
+                    request.addSubnetIds, request.removeSubnetIds
+                )
 
                 ModifyVpcEndpointResult().withReturn(true)
             }

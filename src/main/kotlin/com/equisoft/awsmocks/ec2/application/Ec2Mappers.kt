@@ -30,6 +30,7 @@ fun vpcEndpointFromRequest(request: CreateVpcEndpointRequest): VpcEndpoint = Vpc
     .withGroups()
     .withDnsEntries()
     .withNetworkInterfaceIds()
+    .withSubnetIds(request.subnetIds)
     .withState(State.Available.toString().toLowerCase())
     .withTags(request.tagSpecifications.flatMap(TagSpecification::getTags))
 

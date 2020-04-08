@@ -68,4 +68,22 @@ class VpcEndpointService(
         val vpcEndpoint: VpcEndpoint = get(vpcEndpointId)
         vpcEndpoint.setSubnetIds(vpcEndpoint.routeTableIds - toRemove + toAdd)
     }
+
+    @Synchronized
+    @SuppressWarnings("LongParameterList")
+    fun update(
+        vpcEndpointId: String,
+        policyDocument: String?,
+        addRouteTableIds: List<String>,
+        removeRouteTableIds: List<String>,
+        addSecurityGroupIds: List<String>,
+        removeSecurityGroupIds: List<String>,
+        addSubnetIds: List<String>,
+        removeSubnetIds: List<String>
+    ) {
+        updatePolicyDocument(vpcEndpointId, policyDocument)
+        updateRouteTable(vpcEndpointId, addRouteTableIds, removeRouteTableIds)
+        updateSecurityGroups(vpcEndpointId, addSecurityGroupIds, removeSecurityGroupIds)
+        updateSubnets(vpcEndpointId, addSubnetIds, removeSubnetIds)
+    }
 }
