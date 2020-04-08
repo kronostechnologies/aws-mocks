@@ -8,6 +8,7 @@ import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepos
 
 @SuppressWarnings("LongMethod")
 class EcsRequestHandler(
+    private val capacityProviderService: CapacityProviderService,
     private val clusterService: ClusterService,
     private val serviceService: ServiceService,
     private val taskDefinitionService: TaskDefinitionService,
@@ -15,6 +16,12 @@ class EcsRequestHandler(
 ) {
     fun handle(request: AmazonWebServiceRequest): AmazonWebServiceResult<ResponseMetadata> {
         return when (request) {
+            is CreateCapacityProviderRequest -> {
+                val capacityProvider: CapacityProvider = createCapacityProviderFromRequest(request)
+                capacityProviderService.add(capacityProvider)
+
+                CreateCapacityProviderResult().withCapacityProvider(capacityProvider)
+            }
             is CreateClusterRequest -> {
                 val cluster: Cluster = createClusterFromRequest(request)
                 clusterService.add(cluster)
@@ -26,6 +33,12 @@ class EcsRequestHandler(
                 serviceService.add(service)
 
                 CreateServiceResult().withService(service)
+            }
+            is DescribeCapacityProvidersRequest -> {
+                val capacityProviders: List<CapacityProvider> =
+                    capacityProviderService.getAllByArn(request.capacityProviders)
+
+                DescribeCapacityProvidersResult().withCapacityProviders(capacityProviders)
             }
             is DescribeClustersRequest -> {
                 val searchResult: SearchResult<Cluster> = clusterService.getAll(request.clusters, request.include)

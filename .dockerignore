@@ -9,4 +9,6 @@
 !gradle/
 !config/
 
+**/buildSrc/.gradle
+**/buildSrc/build
 **/src/test

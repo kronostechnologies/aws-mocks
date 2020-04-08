@@ -2,17 +2,18 @@
 
 package com.equisoft.awsmocks.ecs.application
 
-import com.amazonaws.services.ecs.model.Cluster
-import com.amazonaws.services.ecs.model.CreateClusterRequest
-import com.amazonaws.services.ecs.model.CreateServiceRequest
-import com.amazonaws.services.ecs.model.RegisterTaskDefinitionRequest
-import com.amazonaws.services.ecs.model.Service
-import com.amazonaws.services.ecs.model.TaskDefinition
-import com.amazonaws.services.ecs.model.TaskDefinitionStatus
+import com.amazonaws.services.ecs.model.*
 import com.equisoft.awsmocks.common.infrastructure.aws.AwsService.ECS
 import com.equisoft.awsmocks.common.interfaces.http.accountId
 import com.equisoft.awsmocks.common.interfaces.http.region
 import java.util.Date
+
+fun createCapacityProviderFromRequest(request: CreateCapacityProviderRequest): CapacityProvider = CapacityProvider()
+    .withAutoScalingGroupProvider(request.autoScalingGroupProvider)
+    .withCapacityProviderArn(ECS.createArn(request.accountId, "capacity-provider/${request.name}", request.region))
+    .withName(request.name)
+    .withStatus(CapacityProviderStatus.ACTIVE)
+    .withTags(request.tags)
 
 fun createClusterFromRequest(request: CreateClusterRequest): Cluster = Cluster()
     .withClusterName(request.clusterName)

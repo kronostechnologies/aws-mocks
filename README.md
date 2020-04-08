@@ -144,8 +144,10 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [SetSecurityGroupsRequest](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_SetSecurityGroups.html)  
 
 ### ECS
+* [x] [CreateCapacityProviderRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateCapacityProvider.html)  
 * [x] [CreateClusterRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateCluster.html)  
 * [x] [CreateService](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html)  
+* [x] [DescribeCapacityProvidersRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeCapacityProviders.html)  
 * [x] [DescribeClustersRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeClusters.html)  
 * [x] [DescribeServicesRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeServices.html)  
 * [x] [DescribeTaskDefinitionRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeTaskDefinition.html)  
