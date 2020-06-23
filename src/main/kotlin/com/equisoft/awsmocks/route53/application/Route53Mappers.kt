@@ -2,16 +2,7 @@
 
 package com.equisoft.awsmocks.route53.application
 
-import com.amazonaws.services.route53.model.ChangeInfo
-import com.amazonaws.services.route53.model.ChangeStatus
-import com.amazonaws.services.route53.model.CreateHostedZoneRequest
-import com.amazonaws.services.route53.model.CreateHostedZoneResult
-import com.amazonaws.services.route53.model.CreateReusableDelegationSetRequest
-import com.amazonaws.services.route53.model.DelegationSet
-import com.amazonaws.services.route53.model.GetHostedZoneResult
-import com.amazonaws.services.route53.model.HostedZone
-import com.amazonaws.services.route53.model.HostedZoneConfig
-import com.amazonaws.services.route53.model.UpdateHostedZoneCommentResult
+import com.amazonaws.services.route53.model.*
 import com.equisoft.awsmocks.route53.domain.newDefaultDelegationSet
 import java.util.UUID
 

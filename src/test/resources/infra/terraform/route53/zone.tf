@@ -11,3 +11,13 @@ resource "aws_route53_zone" "zone" {
         Name = "zone"
     }
 }
+
+resource "aws_route53_zone" "private_zone" {
+    name = "privatezone.ca"
+    comment = "private zone"
+
+    vpc {
+        vpc_id = "vpc_id"
+        vpc_region = "us-east-1"
+    }
+}

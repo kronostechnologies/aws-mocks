@@ -7,5 +7,5 @@ import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "DescribeNotificationConfigurationsResponse")
 class DescribeNotificationConfigurationsResponse(
-    val describeAutoScalingGroupsResult: DescribeNotificationConfigurationsResult
+    val describeNotificationConfigurationsResult: DescribeNotificationConfigurationsResult
 ) : AmazonWebServiceResult<ResponseMetadata>()

@@ -6,10 +6,11 @@ import com.amazonaws.ResponseMetadata
 import com.amazonaws.services.route53.model.*
 import java.util.UUID
 
-@SuppressWarnings("LongMethod")
+@SuppressWarnings("LongMethod", "ComplexMethod")
 class Route53RequestHandler(
     private val delegationSetService: DelegationSetService,
-    private val hostedZoneService: HostedZoneService
+    private val hostedZoneService: HostedZoneService,
+    private val vpcAssociationService: VpcAssociationService
 ) {
     fun handle(
         request: AmazonWebServiceRequest,
@@ -18,6 +19,14 @@ class Route53RequestHandler(
         val id: String? = parameters["id"]?.firstOrNull()
 
         return when (request) {
+            is AssociateVPCWithHostedZoneRequest -> {
+                vpcAssociationService.associate(request.vpc, request.hostedZoneId)
+
+                val changeInfo: ChangeInfo = ChangeInfo()
+                    .withId("/change/${UUID.randomUUID()}")
+                    .withStatus(ChangeStatus.INSYNC)
+                AssociateVPCWithHostedZoneResult().withChangeInfo(changeInfo)
+            }
             is ChangeResourceRecordSetsRequest -> {
                 hostedZoneService.changeRecordsSets(id!!, request.changeBatch)
 
@@ -39,17 +48,26 @@ class Route53RequestHandler(
             is CreateHostedZoneRequest -> {
                 val hostedZone: HostedZone = createHostedZoneFromRequest(request)
                 hostedZoneService.addOrUpdateZone(hostedZone)
+                request.vpc?.let { vpcAssociationService.associate(it, hostedZone.id) }
 
                 val delegationSet: DelegationSet? = request.delegationSetId?.let {
                     delegationSetService.associate(it, hostedZone)
                 }
 
-                createHostedZoneResult(hostedZone).withDelegationSet(delegationSet)
+                createHostedZoneResult(hostedZone).withDelegationSet(delegationSet).withVPC(request.vpc)
             }
             is DeleteReusableDelegationSetRequest -> {
                 delegationSetService.delete(id)
 
                 DeleteReusableDelegationSetResult()
+            }
+            is DisassociateVPCFromHostedZoneRequest -> {
+                vpcAssociationService.dissociate(request.vpc, request.hostedZoneId)
+
+                val changeInfo: ChangeInfo = ChangeInfo()
+                    .withId("/change/${UUID.randomUUID()}")
+                    .withStatus(ChangeStatus.INSYNC)
+                DisassociateVPCFromHostedZoneResult().withChangeInfo(changeInfo)
             }
             is GetReusableDelegationSetRequest -> {
                 val delegationSet: DelegationSet = delegationSetService.get(id!!)

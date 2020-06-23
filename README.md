@@ -147,11 +147,14 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [CreateCapacityProviderRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateCapacityProvider.html)  
 * [x] [CreateClusterRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateCluster.html)  
 * [x] [CreateService](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html)  
+* [x] [DeleteServiceRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteService.html)  
+* [x] [DeregisterTaskDefinitionRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeregisterTaskDefinition.html)  
 * [x] [DescribeCapacityProvidersRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeCapacityProviders.html)  
 * [x] [DescribeClustersRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeClusters.html)  
 * [x] [DescribeServicesRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeServices.html)  
 * [x] [DescribeTaskDefinitionRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DescribeTaskDefinition.html)  
 * [x] [RegisterTaskDefinitionRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RegisterTaskDefinition.html)  
+* [x] [UpdateServiceRequest](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html)  
 
 ### KMS
 * [x] [CreateAliasRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateAlias.html)  
@@ -167,10 +170,13 @@ Check [Localstack configuration section](https://github.com/localstack/localstac
 * [x] [UpdateKeyDescriptionRequest](https://docs.aws.amazon.com/kms/latest/APIReference/API_UpdateKeyDescription.html)  
 
 ### Route53
+* [x] [AssociateVPCWithHostedZoneRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_AssociateVPCWithHostedZone.html)  
 * [x] [ChangeResourceRecordSetsRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html)  
 * [x] [ChangeTagsForResourceRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeTagsForResource.html)  
 * [x] [CreateHostedZoneRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateHostedZone.html)  
 * [x] [CreateReusableDelegationSetRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateReusableDelegationSet.html)  
+* [x] [DisassociateVPCFromHostedZoneRequestRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_DisassociateVPCFromHostedZone.html)  
+* [x] [GetHostedZoneRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetHostedZone.html)  
 * [x] [GetReusableDelegationSetRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetReusableDelegationSet.html)  
 * [x] [ListHostedZonesRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZones.html)  
 * [x] [ListResourceRecordSetsRequest](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html)  
