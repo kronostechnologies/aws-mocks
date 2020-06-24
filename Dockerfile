@@ -31,7 +31,7 @@ RUN ./gradlew --quiet -Dorg.gradle.daemon=false shadowJar -xcheck
 ##############
 # Application Stage
 ##############
-FROM localstack/localstack:0.11.0 as app
+FROM localstack/localstack:0.11.2 as app
 
 COPY --from=gradle /home/gradle/build/libs/aws-mocks.jar aws-mocks.jar
 COPY ./config ./config

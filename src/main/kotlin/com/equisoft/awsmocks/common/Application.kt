@@ -12,9 +12,11 @@ fun Application.installContentNegotiation(injector: Koin, mainContentType: Conte
     val contentNegotiationFeature: ContentNegotiation = install(ContentNegotiation) {
         if (mainContentType.match(ContentType.Application.Json)) {
             register(ContentType.Any, injector.get(named("json")))
+            register(ContentType.Application.Json, injector.get(named("json")))
             register(ContentType.Application.Xml, injector.get(named("xml")))
         } else {
             register(ContentType.Any, injector.get(named("xml")))
+            register(ContentType.Application.Xml, injector.get(named("xml")))
             register(ContentType.Application.Json, injector.get(named("json")))
         }
     }

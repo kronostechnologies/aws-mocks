@@ -330,6 +330,14 @@ class Ec2ParametersDeserializer : ParametersDeserializer {
                     val ipRanges: List<IpRange> = parseIpPermissionIpRanges(parameters, index)
                     ipPermission.withIpv4Ranges(ipRanges)
                 }
+                key.startsWith("Groups") -> {
+                    val ipRanges: List<UserIdGroupPair> = parseIpPermissionGroupPairs(parameters, index)
+                    ipPermission.withUserIdGroupPairs(ipRanges)
+                }
+                key.startsWith("PrefixListIds") -> {
+                    val prefixLists: List<PrefixListId> = parsePrefixListIds(parameters, index)
+                    ipPermission.withPrefixListIds(prefixLists)
+                }
                 else -> ipPermission
             }
         }
@@ -340,6 +348,25 @@ class Ec2ParametersDeserializer : ParametersDeserializer {
                 "CidrIp" -> ipRange.withCidrIp(value)
                 "Description" -> ipRange.withDescription(value)
                 else -> ipRange
+            }
+        }
+
+    private fun parseIpPermissionGroupPairs(parameters: Parameters, index: Int): List<UserIdGroupPair> =
+        parameters.toObjects("IpPermissions.$index.Groups", ::UserIdGroupPair) { _, groupPair, (key, value) ->
+            when (key) {
+                "GroupId" -> groupPair.withGroupId(value)
+                "GroupName" -> groupPair.withGroupName(value)
+                "UserId" -> groupPair.withUserId(value)
+                else -> groupPair
+            }
+        }
+
+    private fun parsePrefixListIds(parameters: Parameters, index: Int): List<PrefixListId> =
+        parameters.toObjects("IpPermissions.$index.PrefixListIds", ::PrefixListId) { _, prefixList, (key, value) ->
+            when (key) {
+                "PrefixListId" -> prefixList.withPrefixListId(value)
+                "Description" -> prefixList.withDescription(value)
+                else -> prefixList
             }
         }
 }

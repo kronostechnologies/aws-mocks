@@ -6,7 +6,7 @@ import org.koin.dsl.koinApplication
 import org.koin.logger.SLF4JLogger
 
 fun startLocalKoin(modules: List<Module>): KoinApplication = koinApplication {
-    SLF4JLogger()
+    logger(SLF4JLogger())
     modules(modules)
     createEagerInstances()
 }

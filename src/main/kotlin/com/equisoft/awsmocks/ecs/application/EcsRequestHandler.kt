@@ -34,6 +34,16 @@ class EcsRequestHandler(
 
                 CreateServiceResult().withService(service)
             }
+            is DeleteServiceRequest -> {
+                val deletedService = serviceService.delete(request.service)
+
+                DeleteServiceResult().withService(deletedService)
+            }
+            is DeregisterTaskDefinitionRequest -> {
+                val removedDefinition: TaskDefinition = taskDefinitionService.deregister(request.taskDefinition)
+
+                DeregisterTaskDefinitionResult().withTaskDefinition(removedDefinition)
+            }
             is DescribeCapacityProvidersRequest -> {
                 val capacityProviders: List<CapacityProvider> =
                     capacityProviderService.getAllByArn(request.capacityProviders)
@@ -63,6 +73,11 @@ class EcsRequestHandler(
                 resourceTagsRepository.update(taskDefinition.taskDefinitionArn, request.tags)
 
                 RegisterTaskDefinitionResult().withTaskDefinition(taskDefinition)
+            }
+            is UpdateServiceRequest -> {
+                val service = serviceService.update(request.service, request)
+
+                UpdateServiceResult().withService(service)
             }
             else -> throw IllegalArgumentException(request::class.simpleName)
         }

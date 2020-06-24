@@ -1,6 +1,8 @@
 package com.equisoft.awsmocks.route53.interfaces.http
 
+import com.amazonaws.services.route53.model.AssociateVPCWithHostedZoneRequest
 import com.amazonaws.services.route53.model.DelegationSet
+import com.amazonaws.services.route53.model.DisassociateVPCFromHostedZoneRequest
 import com.amazonaws.services.route53.model.GetHostedZoneResult
 import com.amazonaws.services.route53.model.HostedZone
 import com.amazonaws.services.route53.model.ListHostedZonesRequest
@@ -10,6 +12,7 @@ import com.equisoft.awsmocks.common.interfaces.http.getIdParameter
 import com.equisoft.awsmocks.route53.application.DelegationSetService
 import com.equisoft.awsmocks.route53.application.HostedZoneService
 import com.equisoft.awsmocks.route53.application.Route53RequestHandler
+import com.equisoft.awsmocks.route53.application.VpcAssociationService
 import com.equisoft.awsmocks.route53.application.getHostedZoneResult
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -27,6 +30,7 @@ fun hostedZoneResource(injector: Koin, parentRoute: Route) {
     parentRoute {
         val hostedZoneService: HostedZoneService by injector.inject()
         val delegationSetService: DelegationSetService by injector.inject()
+        val vpcAssociationService: VpcAssociationService by injector.inject()
         val requestFactory: XmlRequestFactory by injector.inject()
         val requestHandler: Route53RequestHandler by injector.inject()
 
@@ -49,6 +53,7 @@ fun hostedZoneResource(injector: Koin, parentRoute: Route) {
                     val delegationSet: DelegationSet? = delegationSetService.findForZone(hostedZone)
                     val hostedZoneResult: GetHostedZoneResult = getHostedZoneResult(hostedZone)
                         .withDelegationSet(delegationSet)
+                        .withVPCs(vpcAssociationService.getAll(hostedZone.id))
 
                     call.respond(HttpStatusCode.OK, hostedZoneResult)
                 }
@@ -63,6 +68,18 @@ fun hostedZoneResource(injector: Koin, parentRoute: Route) {
                 delete {
                     hostedZoneService.delete(getIdParameter())
                     call.respond(HttpStatusCode.OK)
+                }
+
+                post("/associatevpc") {
+                    val result = requestHandler.handle(AssociateVPCWithHostedZoneRequest(), call.parameters.toMap())
+
+                    call.respond(HttpStatusCode.OK, result)
+                }
+
+                post("/disassociatevpc ") {
+                    val result = requestHandler.handle(DisassociateVPCFromHostedZoneRequest(), call.parameters.toMap())
+
+                    call.respond(HttpStatusCode.OK, result)
                 }
 
                 route("/rrset") {

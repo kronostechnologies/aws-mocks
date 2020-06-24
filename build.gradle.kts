@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.70"
+    kotlin("jvm") version "1.3.71"
     id("io.gitlab.arturbosch.detekt") version "1.7.0-beta2"
     id("org.jmailen.kotlinter") version "2.3.2"
     id("com.github.johnrengelman.shadow") apply true
@@ -23,8 +23,9 @@ configure<JavaApplication> {
 }
 
 dependencies {
+    val kotlinVersion = "1.3.71"
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     val kotlinCoroutinesVersion = "1.3.5"
-    implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
 
     val junitVersion = "5.6.0"
@@ -44,7 +45,7 @@ dependencies {
     implementation("io.ktor:ktor-jackson:$ktorVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
 
-    val awsSdkVersion = "1.11.746"
+    val awsSdkVersion = "1.11.783"
     implementation("com.amazonaws:aws-java-sdk-acm:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-autoscaling:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-cognitoidp:$awsSdkVersion")
@@ -54,7 +55,7 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-kms:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-route53:$awsSdkVersion")
 
-    val koinVersion = "2.1.1"
+    val koinVersion = "2.1.5"
     implementation("org.koin:koin-core:$koinVersion")
     implementation("org.koin:koin-ktor:$koinVersion")
     implementation("org.koin:koin-logger-slf4j:$koinVersion")
@@ -65,7 +66,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("com.uchuhimo:konf:0.22.1")
 
-    val jacksonVersion = "2.10.3"
+    val jacksonVersion = "2.11.0"
     implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
