@@ -134,12 +134,16 @@ jobs:
           steps:
             - run: echo "export APP_VERSION=$(cut -d 'v' -f 2 \<<<$CIRCLE_TAG)" >> $BASH_ENV
       - run: 'echo "App version: $APP_VERSION"'
-      - docker/check
+      - run:
+          name: 'Docker Login GHCR'
+          command: echo $GHCR_TOKEN | docker login https://ghcr.io -u kronostechnologies-build --password-stdin
       - docker/build:
           image: kronostechnologies/aws-mocks
           tag: ${APP_VERSION}
+          registry: ghcr.io
       - docker/push:
           image: kronostechnologies/aws-mocks
+          registry: ghcr.io
           tag: ${APP_VERSION}
 
 workflows:
@@ -163,7 +167,7 @@ workflows:
             - compile
 
       - docker_build_and_push:
-          context: orb/docker
+          context: github/ghcr
           docker_tag: latest
           filters:
             branches:
