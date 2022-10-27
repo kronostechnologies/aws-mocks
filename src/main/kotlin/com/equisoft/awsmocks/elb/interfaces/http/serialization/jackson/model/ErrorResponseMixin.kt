@@ -2,7 +2,7 @@ package com.equisoft.awsmocks.elb.interfaces.http.serialization.jackson.model
 
 import com.equisoft.awsmocks.common.exceptions.Error
 import com.fasterxml.jackson.annotation.JsonProperty
-import javax.xml.bind.annotation.XmlRootElement
+import jakarta.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "ErrorResponse")
 interface ErrorResponseMixin {

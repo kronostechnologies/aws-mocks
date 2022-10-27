@@ -4,7 +4,6 @@ java \
     ${AWSMOCKS_JAVA_OPTS} \
     -server \
     -XX:+UnlockExperimentalVMOptions \
-    -XX:+UseCGroupMemoryLimitForHeap \
     -XX:InitialRAMFraction=2 \
     -XX:MinRAMFraction=2 \
     -XX:MaxRAMFraction=2 \

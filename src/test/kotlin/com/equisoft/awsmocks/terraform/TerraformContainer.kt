@@ -1,20 +1,31 @@
 package com.equisoft.awsmocks.terraform
 
+import com.equisoft.awsmocks.DefaultPorts
 import com.equisoft.awsmocks.testutils.TerraformApplyFailed
 import com.github.dockerjava.api.model.HostConfig
 import kotlinx.coroutines.delay
+import org.testcontainers.Testcontainers
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.output.OutputFrame
-import java.net.InetAddress
 import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
 
 private const val FIVE_MINUTES_MS = 300_000L
-private val TERRAFORM_VERSION: String = System.getenv("TERRAFORM_VERSION") ?: "0.12.24"
+private val TERRAFORM_VERSION: String = System.getenv("TERRAFORM_VERSION") ?: "1.3.3"
 
 class TerraformContainer : GenericContainer<TerraformContainer>("hashicorp/terraform:$TERRAFORM_VERSION") {
     init {
-        withEnv("TF_VAR_hostname", InetAddress.getLocalHost().hostAddress)
+        Testcontainers.exposeHostPorts(
+            DefaultPorts.ACM,
+            DefaultPorts.AUTOSCALING,
+            DefaultPorts.COGNITO,
+            DefaultPorts.EC2,
+            DefaultPorts.ECS,
+            DefaultPorts.ELB,
+            DefaultPorts.KMS,
+            DefaultPorts.ROUTE53
+        )
+        withEnv("TF_VAR_hostname", INTERNAL_HOST_HOSTNAME)
             .withCommand("apply -auto-approve")
             .withCreateContainerCmdModifier {
                 val hostConfig: HostConfig = it.hostConfig ?: HostConfig.newHostConfig()

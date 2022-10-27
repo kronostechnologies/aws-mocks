@@ -11,5 +11,5 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.jengelman.gradle.plugins:shadow:5.2.0")
+    implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
 }

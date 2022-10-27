@@ -31,13 +31,13 @@ RUN ./gradlew --quiet -Dorg.gradle.daemon=false shadowJar -xcheck
 ##############
 # Application Stage
 ##############
-FROM localstack/localstack:0.11.5 as app
+FROM localstack/localstack:0.12.20 as app
 
 COPY --from=gradle /home/gradle/build/libs/aws-mocks.jar aws-mocks.jar
 COPY ./config ./config
 COPY ./scripts ./
 
-RUN chown -R $USER: . /tmp/localstack
+RUN chown -R $USER: . /var/lib/localstack/ /tmp/localstack/ /usr/lib/localstack/ || true
 USER $USER
 
 ENV AWSMOCKS_JAVA_OPTS="-Dlogback.configurationFile=logback-docker.xml"

@@ -27,11 +27,11 @@ import com.equisoft.awsmocks.common.infrastructure.persistence.ResourceTagsRepos
 import com.equisoft.awsmocks.common.interfaces.http.FormRequestFactory
 import com.equisoft.awsmocks.common.interfaces.http.ParametersDeserializer
 import com.fasterxml.jackson.databind.AnnotationIntrospector
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -52,9 +52,12 @@ fun autoScalingModules(): List<Module> = listOf(module {
     single {
         xmlMapper()
             .addAutoScalingMixIns()
-            .setPropertyNamingStrategy(PropertyNamingStrategy.UPPER_CAMEL_CASE)
-            .setAnnotationIntrospector(AnnotationIntrospector.pair(
-                JacksonAnnotationIntrospector(), JaxbAnnotationIntrospector(TypeFactory.defaultInstance())))
+            .setPropertyNamingStrategy(PropertyNamingStrategies.UPPER_CAMEL_CASE)
+            .setAnnotationIntrospector(
+                AnnotationIntrospector.pair(
+                    JacksonAnnotationIntrospector(), JakartaXmlBindAnnotationIntrospector(TypeFactory.defaultInstance())
+                )
+            )
             as XmlMapper
     }
     single { objectMapper() }
@@ -64,8 +67,10 @@ internal fun XmlMapper.addAutoScalingMixIns(): XmlMapper = this
     .addMixIn(AutoScalingGroup::class.java, AutoScalingGroupMixin::class.java)
     .addMixIn(DescribeAutoScalingGroupsResult::class.java, DescribeAutoScalingGroupsResultMixin::class.java)
     .addMixIn(DescribeLaunchConfigurationsResult::class.java, DescribeLaunchConfigurationsResultMixin::class.java)
-    .addMixIn(DescribeNotificationConfigurationsResult::class.java,
-        DescribeNotificationConfigurationsResultMixin::class.java)
+    .addMixIn(
+        DescribeNotificationConfigurationsResult::class.java,
+        DescribeNotificationConfigurationsResultMixin::class.java
+    )
     .addMixIn(InstanceMonitoring::class.java, InstanceMonitoringMixin::class.java)
     .addMixIn(LaunchConfiguration::class.java, LaunchConfigurationMixin::class.java)
     as XmlMapper

@@ -8,14 +8,13 @@ import com.equisoft.awsmocks.common.exceptions.ResourceNotFoundError
 import com.equisoft.awsmocks.common.exceptions.ResourceNotFoundException
 import com.equisoft.awsmocks.common.installContentNegotiation
 import com.equisoft.awsmocks.utils.callLogging
-import io.ktor.application.Application
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
-import io.ktor.routing.routing
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.respond
+import io.ktor.server.routing.routing
 import org.koin.core.Koin
 import org.koin.core.KoinApplication
 
@@ -32,11 +31,11 @@ private fun Application.init(injector: Koin) {
     installContentNegotiation(injector, ContentType.Application.Json)
 
     install(StatusPages) {
-        exception<ResourceNotFoundException> {
+        exception<ResourceNotFoundException> { call, _ ->
             call.respond(HttpStatusCode.BadRequest, ResourceNotFoundError)
         }
 
-        exception<BadRequestException> {
+        exception<BadRequestException> { call, _ ->
             call.respond(HttpStatusCode.BadRequest)
         }
     }

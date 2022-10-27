@@ -3,7 +3,6 @@ package com.equisoft.awsmocks.cognito.infrastructure.cryptography
 import com.nimbusds.jose.jwk.KeyType
 import com.nimbusds.jose.jwk.ThumbprintUtils
 import java.security.interfaces.RSAPublicKey
-import java.util.LinkedHashMap
 
 class KeyIdCalculator {
     fun calculate(publicKey: RSAPublicKey): String {

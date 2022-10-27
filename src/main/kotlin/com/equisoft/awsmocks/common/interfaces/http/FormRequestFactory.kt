@@ -1,10 +1,10 @@
 package com.equisoft.awsmocks.common.interfaces.http
 
 import com.amazonaws.AmazonWebServiceRequest
-import io.ktor.application.ApplicationCall
-import io.ktor.application.log
 import io.ktor.http.Parameters
-import io.ktor.request.receiveParameters
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.log
+import io.ktor.server.request.receiveParameters
 import io.ktor.util.StringValues
 import io.ktor.util.filter
 import io.ktor.util.flattenEntries

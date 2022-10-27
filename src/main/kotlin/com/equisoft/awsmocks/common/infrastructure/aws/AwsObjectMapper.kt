@@ -1,7 +1,7 @@
 package com.equisoft.awsmocks.common.infrastructure.aws
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.UPPER_CAMEL_CASE
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.UPPER_CAMEL_CASE
 import java.io.InputStream
 
 object AwsObjectMapper {

@@ -1,35 +1,36 @@
 package com.equisoft.awsmocks.common.interfaces.http.feature
 
-import io.ktor.application.ApplicationCall
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.ContentNegotiation.ConverterRegistration
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.content.OutgoingContent
-import io.ktor.response.ApplicationSendPipeline
+import io.ktor.serialization.ContentConverter
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.application.BaseApplicationPlugin
+import io.ktor.server.application.call
+import io.ktor.server.application.log
+import io.ktor.server.response.ApplicationSendPipeline
+import io.ktor.server.response.responseType
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelineContext
 
 class ResponseLogging {
     class Configuration {
-        var contentNegotiation: ContentNegotiation? = null
+        var anyContentConverter: ContentConverter? = null
+        var jsonContentConverter: ContentConverter? = null
+        var xmlContentConverter: ContentConverter? = null
     }
 
-    companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, ResponseLogging> {
+    companion object Feature : BaseApplicationPlugin<ApplicationCallPipeline, Configuration, ResponseLogging> {
         override val key = AttributeKey<ResponseLogging>("ResponseLogging")
 
         override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): ResponseLogging {
             val configuration = Configuration().apply(configure)
-            val contentNegotiation: ContentNegotiation = checkNotNull(configuration.contentNegotiation)
 
             pipeline.sendPipeline.intercept(ApplicationSendPipeline.Transform) {
                 if (subject is OutgoingContent) return@intercept
 
-                findConverterForContentType(contentNegotiation.registrations)?.apply {
+                findConverterForContentType(configuration)?.run {
                     call.application.log.debug(convertToString(this@intercept, subject))
                 }
 
@@ -42,27 +43,33 @@ class ResponseLogging {
 }
 
 private fun PipelineContext<Any, ApplicationCall>.findConverterForContentType(
-    registrations: List<ConverterRegistration>
-): ConverterRegistration? {
+    configuration: ResponseLogging.Configuration,
+): ContentConverter? {
     val contentType: String? = call.request.headers[HttpHeaders.ContentType]
 
     return if (contentType?.contains("json") == true) {
-        registrations.find(ContentType.Application.Json)
+        configuration.anyContentConverter
     } else {
-        registrations.find(ContentType.Any)
+        configuration.jsonContentConverter
     }
 }
 
-private fun List<ConverterRegistration>.find(contentType: ContentType): ConverterRegistration? = find {
-    it.contentType.match(contentType)
-} ?: if (contentType == ContentType.Any) null else find(ContentType.Any)
-
-@OptIn(ExperimentalStdlibApi::class)
-private suspend fun ConverterRegistration.convertToString(
+private suspend fun ContentConverter.convertToString(
     context: PipelineContext<Any, ApplicationCall>,
     value: Any
-): String? =
-    when (val content: Any? = converter.convertForSend(context, contentType, value)) {
+): String? {
+    val contentType: String =
+        context.call.request.headers[HttpHeaders.ContentType] ?: ContentType.Application.Json.toString()
+
+    val responseType = context.call.response.responseType ?: return null
+
+    return when (val content: Any? = this.serializeNullable(
+        ContentType.parse(contentType),
+        Charsets.UTF_8,
+        responseType,
+        value
+    )) {
         is OutgoingContent.ByteArrayContent -> content.bytes().decodeToString()
         else -> content.toString()
     }
+}

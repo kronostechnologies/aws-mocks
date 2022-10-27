@@ -1,7 +1,7 @@
 package com.equisoft.awsmocks.cognito.interfaces.http.dto
 
-import io.ktor.auth.UserPasswordCredential
 import io.ktor.http.Parameters
+import io.ktor.server.auth.UserPasswordCredential
 
 data class TokenRequest(
     val userPoolId: String,

@@ -4,28 +4,29 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.71"
-    id("io.gitlab.arturbosch.detekt") version "1.7.0-beta2"
-    id("org.jmailen.kotlinter") version "2.3.2"
+    kotlin("jvm") version "1.7.20"
+    id("io.gitlab.arturbosch.detekt") version "1.21.0"
+    id("org.jmailen.kotlinter") version "3.12.0"
     id("com.github.johnrengelman.shadow") apply true
 }
 
 repositories {
     jcenter()
-    maven { setUrl("https://kotlin.bintray.com/ktor") }
-    maven { setUrl("https://kotlin.bintray.com/kotlinx") }
+    mavenCentral()
 }
 
 version = "1.0-SNAPSHOT"
 
 configure<JavaApplication> {
-    mainClassName = "com.equisoft.awsmocks.MainKt"
+    mainClass.set("com.equisoft.awsmocks.MainKt")
 }
 
 dependencies {
-    val kotlinVersion = "1.3.71"
+    implementation("io.ktor:ktor-server-core-jvm:2.1.2")
+    implementation("io.ktor:ktor-server-double-receive-jvm:2.1.2")
+    val kotlinVersion = "1.7.20"
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    val kotlinCoroutinesVersion = "1.3.5"
+    val kotlinCoroutinesVersion = "1.6.4"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
 
     val junitVersion = "5.6.0"
@@ -38,14 +39,18 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
     testRuntimeOnly(kotlin("reflect"))
 
-    val ktorVersion = "1.3.2"
-    implementation("io.ktor:ktor-auth:$ktorVersion")
+    val ktorVersion = "2.1.2"
+    implementation("io.ktor:ktor-server-auth:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-double-receive:$ktorVersion")
     implementation("io.ktor:ktor-server-jetty:$ktorVersion")
-    implementation("io.ktor:ktor-jackson:$ktorVersion")
+    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
 
-    val awsSdkVersion = "1.11.783"
+    val awsSdkVersion = "1.12.238"
     implementation("com.amazonaws:aws-java-sdk-acm:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-autoscaling:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-cognitoidp:$awsSdkVersion")
@@ -55,10 +60,11 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-kms:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-route53:$awsSdkVersion")
 
-    val koinVersion = "2.1.5"
-    implementation("org.koin:koin-core:$koinVersion")
-    implementation("org.koin:koin-ktor:$koinVersion")
-    implementation("org.koin:koin-logger-slf4j:$koinVersion")
+    val koinVersion = "3.2.2"
+    implementation("io.insert-koin:koin-core:$koinVersion")
+    implementation("io.insert-koin:koin-core-jvm:$koinVersion")
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 
     implementation("com.auth0:java-jwt:3.10.1")
     implementation("com.nimbusds:nimbus-jose-jwt:8.10")
@@ -66,14 +72,19 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("com.uchuhimo:konf:0.22.1")
 
-    val jacksonVersion = "2.11.0"
+    val jacksonVersion = "2.13.4"
     implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:$jacksonVersion")
+//    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
-    val testContainersVersion = "1.13.0"
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+    implementation("com.sun.xml.bind:jaxb-impl:4.0.1")
+
+    val testContainersVersion = "1.17.5"
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 }
@@ -87,7 +98,6 @@ configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
 
 kotlinter {
     disabledRules = arrayOf("import-ordering", "no-wildcard-imports")
-    indentSize = 4
 }
 
 tasks {
@@ -159,5 +169,10 @@ tasks {
         dependsOn("ci-classes")
 
         dependsOn("e2e")
+    }
+
+    wrapper {
+        distributionType = Wrapper.DistributionType.ALL
+        gradleVersion = "7.5.1"
     }
 }

@@ -18,6 +18,8 @@ class RewriteServiceHandlers : Transformer {
     private val patterns: PatternSet = PatternSet().include("com/amazonaws/services/**/*.handler*")
     private val linesToWrite: MutableMap<String, String> = mutableMapOf()
 
+    override fun getName(): String = "RewriteServiceHandlersForAws"
+
     override fun canTransformResource(element: FileTreeElement?): Boolean = if (element != null) {
         val target: FileTreeElement = if (element is ShadowCopyAction.ArchiveFileTreeElement) {
             element.asFileTreeElement()
@@ -36,7 +38,7 @@ class RewriteServiceHandlers : Transformer {
                         .className(line)
                         .stats(context.stats)
                         .build()
-                    if (relocator.canRelocateClass(lineContext)) {
+                    if (relocator.canRelocateClass(lineContext.className)) {
                         relocator.relocateClass(lineContext)
                     } else {
                         line

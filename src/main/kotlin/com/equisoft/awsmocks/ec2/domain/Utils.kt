@@ -1,10 +1,45 @@
 package com.equisoft.awsmocks.ec2.domain
 
-import com.amazonaws.services.ec2.model.*
+import com.amazonaws.services.ec2.model.ClientVpnEndpoint
+import com.amazonaws.services.ec2.model.CustomerGateway
+import com.amazonaws.services.ec2.model.DhcpOptions
+import com.amazonaws.services.ec2.model.FleetData
+import com.amazonaws.services.ec2.model.FlowLog
+import com.amazonaws.services.ec2.model.FpgaImage
+import com.amazonaws.services.ec2.model.HostReservation
+import com.amazonaws.services.ec2.model.Image
+import com.amazonaws.services.ec2.model.Instance
+import com.amazonaws.services.ec2.model.InternetGateway
+import com.amazonaws.services.ec2.model.KeyPair
+import com.amazonaws.services.ec2.model.LaunchTemplate
+import com.amazonaws.services.ec2.model.NatGateway
+import com.amazonaws.services.ec2.model.NetworkAcl
+import com.amazonaws.services.ec2.model.NetworkInterface
+import com.amazonaws.services.ec2.model.PlacementGroup
+import com.amazonaws.services.ec2.model.ReservedInstances
+import com.amazonaws.services.ec2.model.ResourceType
+import com.amazonaws.services.ec2.model.RouteTable
+import com.amazonaws.services.ec2.model.SecurityGroup
+import com.amazonaws.services.ec2.model.Snapshot
+import com.amazonaws.services.ec2.model.SpotFleetRequestConfig
+import com.amazonaws.services.ec2.model.SpotInstanceRequest
+import com.amazonaws.services.ec2.model.Subnet
+import com.amazonaws.services.ec2.model.TrafficMirrorFilter
+import com.amazonaws.services.ec2.model.TrafficMirrorSession
+import com.amazonaws.services.ec2.model.TrafficMirrorTarget
+import com.amazonaws.services.ec2.model.TransitGateway
+import com.amazonaws.services.ec2.model.TransitGatewayAttachment
+import com.amazonaws.services.ec2.model.TransitGatewayMulticastDomain
+import com.amazonaws.services.ec2.model.TransitGatewayRouteTable
+import com.amazonaws.services.ec2.model.Volume
+import com.amazonaws.services.ec2.model.Vpc
+import com.amazonaws.services.ec2.model.VpcPeeringConnection
+import com.amazonaws.services.ec2.model.VpnConnection
+import com.amazonaws.services.ec2.model.VpnGateway
 
 fun findResourceType(resource: Any?): ResourceType? = resource?.let(::mapClassToResourceType)
 
-private fun mapClassToResourceType(it: Any): ResourceType? = when (it) {
+private fun mapClassToResourceType(it: Any): ResourceType = when (it) {
     is ClientVpnEndpoint -> ResourceType.ClientVpnEndpoint
     is CustomerGateway -> ResourceType.CustomerGateway
     is DhcpOptions -> ResourceType.DhcpOptions
@@ -40,5 +75,5 @@ private fun mapClassToResourceType(it: Any): ResourceType? = when (it) {
     is VpnConnection -> ResourceType.VpnConnection
     is VpnGateway -> ResourceType.VpnGateway
     is FlowLog -> ResourceType.VpcFlowLog
-    else -> null
+    else -> ResourceType.valueOf(it::class.simpleName.toString())
 }

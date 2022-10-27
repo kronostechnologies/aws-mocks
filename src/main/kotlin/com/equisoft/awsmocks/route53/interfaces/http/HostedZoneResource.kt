@@ -14,14 +14,14 @@ import com.equisoft.awsmocks.route53.application.HostedZoneService
 import com.equisoft.awsmocks.route53.application.Route53RequestHandler
 import com.equisoft.awsmocks.route53.application.VpcAssociationService
 import com.equisoft.awsmocks.route53.application.getHostedZoneResult
-import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.delete
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.server.application.call
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
 import io.ktor.util.toMap
 import org.koin.core.Koin
 
@@ -89,7 +89,7 @@ fun hostedZoneResource(injector: Koin, parentRoute: Route) {
                         call.respond(HttpStatusCode.OK, result)
                     }
 
-                    post {
+                    post("/") {
                         val request = requestFactory.create(call)
                         val result = requestHandler.handle(request, call.parameters.toMap())
 

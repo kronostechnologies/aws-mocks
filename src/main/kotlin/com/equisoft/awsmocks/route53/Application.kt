@@ -10,14 +10,13 @@ import com.equisoft.awsmocks.common.installContentNegotiation
 import com.equisoft.awsmocks.route53.context.route53modules
 import com.equisoft.awsmocks.route53.interfaces.http.route53resource
 import com.equisoft.awsmocks.utils.callLogging
-import io.ktor.application.Application
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
-import io.ktor.routing.routing
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.respond
+import io.ktor.server.routing.routing
 import org.koin.core.Koin
 import org.koin.core.KoinApplication
 
@@ -34,11 +33,11 @@ private fun Application.init(injector: Koin) {
     installContentNegotiation(injector, ContentType.Application.Xml)
 
     install(StatusPages) {
-        exception<BadRequestException> {
-            call.respond(HttpStatusCode.BadRequest, ErrorResponse(BadRequestError(it.errorCode)))
+        exception<BadRequestException> { call, cause ->
+            call.respond(HttpStatusCode.BadRequest, ErrorResponse(BadRequestError(cause.errorCode)))
         }
-        exception<NotFoundException> {
-            call.respond(HttpStatusCode.NotFound, ErrorResponse(NotFoundError(it.errorCode)))
+        exception<NotFoundException> { call, cause ->
+            call.respond(HttpStatusCode.NotFound, ErrorResponse(NotFoundError(cause.errorCode)))
         }
     }
 

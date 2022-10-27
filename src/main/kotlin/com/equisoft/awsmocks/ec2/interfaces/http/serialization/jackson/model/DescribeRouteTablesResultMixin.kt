@@ -2,7 +2,7 @@ package com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model
 
 import com.amazonaws.services.ec2.model.RouteTable
 import com.equisoft.awsmocks.common.interfaces.http.serialization.jackson.ListItem
-import javax.xml.bind.annotation.XmlRootElement
+import jakarta.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "DescribeRouteTablesResponse")
 interface DescribeRouteTablesResultMixin {

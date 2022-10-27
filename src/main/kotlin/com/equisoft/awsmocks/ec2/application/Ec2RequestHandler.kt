@@ -42,50 +42,59 @@ class Ec2RequestHandler(
                 AssociateRouteTableResult().withAssociationId(routeTableAssociation.routeTableAssociationId)
                     .withAssociationState(routeTableAssociation.associationState)
             }
+
             is AttachInternetGatewayRequest -> {
                 internetGatewayService.attach(request.internetGatewayId, request.vpcId)
                 AttachInternetGatewayResult()
             }
+
             is AuthorizeSecurityGroupEgressRequest -> {
                 securityGroupService.authorizeEgress(request.groupId, request.ipPermissions)
 
                 AuthorizeSecurityGroupEgressResult()
             }
+
             is AuthorizeSecurityGroupIngressRequest -> {
                 securityGroupService.authorizeIngress(request.groupId, request.ipPermissions)
 
                 AuthorizeSecurityGroupIngressResult()
             }
+
             is CreateInternetGatewayRequest -> {
                 val internetGateway: InternetGateway = internetGatewayFromRequest(request)
                 internetGatewayService.addOrUpdate(internetGateway)
 
                 CreateInternetGatewayResult().withInternetGateway(internetGateway)
             }
+
             is CreateRouteRequest -> {
                 val route: Route = routeFromRequest(request)
                 routeTableService.addRoute(request.routeTableId, route)
 
                 CreateRouteResult().withReturn(true)
             }
+
             is CreateRouteTableRequest -> {
                 val routeTable: RouteTable = routeTableFromRequest(request)
                 routeTableService.addOrUpdate(routeTable)
 
                 CreateRouteTableResult().withRouteTable(routeTable)
             }
+
             is CreateSecurityGroupRequest -> {
                 val securityGroup: SecurityGroup = securityGroupFromRequest(request)
                 securityGroupService.addOrUpdate(securityGroup)
 
                 CreateSecurityGroupResult().withGroupId(securityGroup.groupId)
             }
+
             is CreateSubnetRequest -> {
                 val subnet: Subnet = subnetFromRequest(request).apply { requireNotNull(vpcId) }
                 subnetService.addOrUpdate(subnet)
 
                 CreateSubnetResult().withSubnet(subnet)
             }
+
             is CreateTagsRequest -> {
                 request.resources.forEach { id ->
                     tagsRepository.update(id, request.tags)
@@ -93,18 +102,21 @@ class Ec2RequestHandler(
 
                 CreateTagsResult()
             }
+
             is CreateVpcEndpointRequest -> {
                 val vpcEndpoint: VpcEndpoint = vpcEndpointFromRequest(request)
                 vpcEndpointService.addOrUpdate(vpcEndpoint)
 
                 CreateVpcEndpointResult().withClientToken(request.clientToken).withVpcEndpoint(vpcEndpoint)
             }
+
             is CreateVpcRequest -> {
                 val vpc: Vpc = vpcFromRequest(request)
                 vpcService.addOrUpdate(vpc)
 
                 CreateVpcResult().withVpc(vpc)
             }
+
             is DescribeAccountAttributesRequest -> {
                 val attribute: AccountAttribute = AccountAttribute()
                     .withAttributeName("supported-platforms")
@@ -112,12 +124,15 @@ class Ec2RequestHandler(
 
                 DescribeAccountAttributesResult().withAccountAttributes(attribute)
             }
+
             is DescribeAvailabilityZonesRequest -> {
                 availabilityZoneService.getAll(request.region!!)
             }
+
             is DescribeImagesRequest -> {
                 readResource<DescribeImagesResult>(EC2).filter(request.filters)
             }
+
             is DescribeInstanceAttributeRequest -> {
                 val instance: Instance = instanceService.get(request.instanceId)
                 val instanceAttribute = InstanceAttribute().withInstanceId(instance.instanceId)
@@ -135,29 +150,35 @@ class Ec2RequestHandler(
 
                 DescribeInstanceAttributeResponse(instanceAttribute)
             }
+
             is DescribeInstanceCreditSpecificationsRequest -> {
                 DescribeInstanceCreditSpecificationsResult().withInstanceCreditSpecifications(request.instanceIds.map {
                     InstanceCreditSpecification().withInstanceId(it).withCpuCredits("unlimited")
                 })
             }
+
             is DescribeInstancesRequest -> {
                 val reservations: List<Reservation> = reservationService.getAll(filters = request.filters)
 
                 DescribeInstancesResult().withReservations(reservations)
             }
+
             is DescribeInternetGatewaysRequest -> {
                 val internetGateways = internetGatewayService.getAll(request.internetGatewayIds, request.filters)
 
                 DescribeInternetGatewaysResult().withInternetGateways(internetGateways)
             }
+
             is DescribeNetworkAclsRequest -> {
                 DescribeNetworkAclsResult()
             }
+
             is DescribePrefixListsRequest -> {
                 val prefixLists: List<PrefixList> = vpcEndpointService.getPrefixLists(request.filters)
 
                 DescribePrefixListsResult().withPrefixLists(prefixLists)
             }
+
             is DescribeRouteTablesRequest -> {
                 val routeTables: List<RouteTable> = routeTableService.getAll(
                     ids = request.routeTableIds,
@@ -166,12 +187,16 @@ class Ec2RequestHandler(
 
                 DescribeRouteTablesResult().withRouteTables(routeTables)
             }
+
             is DescribeSecurityGroupsRequest -> {
-                val securityGroups: List<SecurityGroup> = securityGroupService.getAll(request.filters, request.groupIds,
-                    request.groupNames)
+                val securityGroups: List<SecurityGroup> = securityGroupService.getAll(
+                    request.filters, request.groupIds,
+                    request.groupNames
+                )
 
                 DescribeSecurityGroupsResult().withSecurityGroups(securityGroups)
             }
+
             is DescribeSubnetsRequest -> {
                 val subnets: List<Subnet> = subnetService.getAll(
                     ids = request.subnetIds,
@@ -180,26 +205,30 @@ class Ec2RequestHandler(
 
                 DescribeSubnetsResult().withSubnets(subnets)
             }
+
             is DescribeTagsRequest -> {
                 val tags: List<TagDescription>? = request.filters.find("resource-id")
                     ?.let { filter ->
                         val resourceId = filter.values.firstOrNull()
-                        val resource = resourcesRepository.findResource(resourceId)
-                        tagsRepository[resourceId]?.map {
-                            TagDescription().withKey(it.key)
-                                .withValue(it.value)
-                                .withResourceId(resourceId)
-                                .withResourceType(findResourceType(resource))
+                        resourcesRepository.findResource(resourceId)?.run {
+                            tagsRepository[resourceId]?.map {
+                                TagDescription().withKey(it.key)
+                                    .withValue(it.value)
+                                    .withResourceId(resourceId)
+                                    .withResourceType(findResourceType(this))
+                            }
                         }
                     }
 
                 DescribeTagsResult().withTags(tags)
             }
+
             is DescribeVolumesRequest -> {
                 val volumes: List<Volume> = volumeService.getAll(request.volumeIds, request.filters)
 
                 DescribeVolumesResult().withVolumes(volumes)
             }
+
             is DescribeVpcAttributeRequest -> {
                 val vpcAttribute: VpcAttributeName = VpcAttributeName.fromValue(request.attribute)
                 val hasAttribute: Boolean = vpcService.hasAttribute(request.vpcId, vpcAttribute)
@@ -213,19 +242,23 @@ class Ec2RequestHandler(
                     .withEnableDnsHostnames(isAttributeActive(VpcAttributeName.EnableDnsHostnames))
                     .withEnableDnsSupport(isAttributeActive(VpcAttributeName.EnableDnsSupport))
             }
+
             is DescribeVpcClassicLinkRequest -> {
                 // TODO(meriouma): Incomplete for now, just needed an empty answer
                 DescribeVpcClassicLinkResult()
             }
+
             is DescribeVpcClassicLinkDnsSupportRequest -> {
                 // TODO(meriouma): Incomplete for now, just needed an empty answer
                 DescribeVpcClassicLinkDnsSupportResult()
             }
+
             is DescribeVpcEndpointsRequest -> {
                 val vpcEndpoints: List<VpcEndpoint> = vpcEndpointService.getAll(request.vpcEndpointIds)
 
                 DescribeVpcEndpointsResult().withVpcEndpoints(vpcEndpoints)
             }
+
             is DescribeVpcEndpointServicesRequest -> {
                 val serviceDetails: List<ServiceDetail> = vpcEndpointService.getServiceDetails(request.serviceNames)
 
@@ -233,29 +266,35 @@ class Ec2RequestHandler(
                     .withServiceDetails(serviceDetails)
                     .withServiceNames(serviceDetails.map { it.serviceName })
             }
+
             is DescribeVpcsRequest -> {
                 val vpcs: List<Vpc> = vpcService.getAll(request.vpcIds, request.filters)
 
                 DescribeVpcsResult().withVpcs(vpcs)
             }
+
             is DisassociateRouteTableRequest -> {
                 routeTableService.removeAssociation(request.associationId)
 
                 DisassociateRouteTableResult()
             }
+
             is ModifyInstanceAttributeRequest -> {
                 instanceService.modifyAttributes(request.instanceId, request)
 
                 ModifyInstanceAttributeResult()
             }
+
             is ModifyVpcAttributeRequest -> {
-                vpcService.modifyAttributes(request.vpcId,
+                vpcService.modifyAttributes(
+                    request.vpcId,
                     VpcAttributeName.EnableDnsHostnames to request.enableDnsHostnames,
                     VpcAttributeName.EnableDnsSupport to request.enableDnsSupport
                 )
 
                 ModifyVpcAttributeResult()
             }
+
             is ModifyVpcEndpointRequest -> {
                 vpcEndpointService.update(
                     request.vpcEndpointId,
@@ -267,17 +306,20 @@ class Ec2RequestHandler(
 
                 ModifyVpcEndpointResult().withReturn(true)
             }
+
             is RevokeSecurityGroupEgressRequest -> {
                 securityGroupService.revokeEgress(request.groupId, request.ipPermissions)
 
                 RevokeSecurityGroupEgressResult()
             }
+
             is RunInstancesRequest -> {
                 val reservation: Reservation = instancesReservationFromRequest(request)
                 reservationService.addOrUpdate(reservation)
 
                 RunInstancesResponse(reservation)
             }
+
             is TerminateInstancesRequest -> {
                 instanceService.terminateInstances(request.instanceIds)
 
@@ -287,6 +329,7 @@ class Ec2RequestHandler(
                         .withPreviousState(InstanceState().withCode(RUNNING).withName("running"))
                 })
             }
+
             else -> throw IllegalArgumentException(request::class.qualifiedName)
         }
 }

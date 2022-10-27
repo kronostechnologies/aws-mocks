@@ -11,17 +11,17 @@ import com.equisoft.awsmocks.cognito.interfaces.http.dto.TokenRequest
 import com.equisoft.awsmocks.cognito.interfaces.http.dto.toTokenRequest
 import com.equisoft.awsmocks.common.interfaces.http.JsonRequestFactory
 import com.equisoft.awsmocks.utils.traceAllCalls
-import io.ktor.application.call
-import io.ktor.auth.UserPasswordCredential
-import io.ktor.auth.basicAuthenticationCredentials
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.receiveParameters
-import io.ktor.response.respond
-import io.ktor.response.respondText
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.routing.post
+import io.ktor.server.application.call
+import io.ktor.server.auth.UserPasswordCredential
+import io.ktor.server.auth.basicAuthenticationCredentials
+import io.ktor.server.request.receiveParameters
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import org.koin.core.Koin
 
 fun cognitoResource(injector: Koin, routing: Routing) {

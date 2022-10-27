@@ -15,10 +15,10 @@ import com.equisoft.awsmocks.ec2.interfaces.http.Ec2ParametersDeserializer
 import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.Ec2JacksonAnnotationIntrospector
 import com.equisoft.awsmocks.ec2.interfaces.http.serialization.jackson.model.*
 import com.fasterxml.jackson.databind.AnnotationIntrospector
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationIntrospector
 import org.koin.core.module.Module
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -64,9 +64,12 @@ fun ec2Modules(): List<Module> {
         single {
             xmlMapper()
                 .addMixIns()
-                .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
-                .setAnnotationIntrospector(AnnotationIntrospector.pair(
-                    Ec2JacksonAnnotationIntrospector(), JaxbAnnotationIntrospector(TypeFactory.defaultInstance()))
+                .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
+                .setAnnotationIntrospector(
+                    AnnotationIntrospector.pair(
+                        Ec2JacksonAnnotationIntrospector(),
+                        JakartaXmlBindAnnotationIntrospector(TypeFactory.defaultInstance())
+                    )
                 ) as XmlMapper
         }
         single { objectMapper() }
@@ -86,8 +89,10 @@ private fun XmlMapper.addMixIns(): XmlMapper = this
     .addMixIn(CreateVpcResult::class.java, CreateVpcResultMixin::class.java)
     .addMixIn(DescribeAccountAttributesResult::class.java, DescribeAccountAttributesMixin::class.java)
     .addMixIn(DescribeAvailabilityZonesResult::class.java, DescribeAvailabilityZonesResultMixin::class.java)
-    .addMixIn(DescribeInstanceCreditSpecificationsResult::class.java,
-        DescribeInstanceCreditSpecificationsResultMixin::class.java)
+    .addMixIn(
+        DescribeInstanceCreditSpecificationsResult::class.java,
+        DescribeInstanceCreditSpecificationsResultMixin::class.java
+    )
     .addMixIn(DescribeImagesResult::class.java, DescribeImagesResultMixin::class.java)
     .addMixIn(DescribeInstancesResult::class.java, DescribeInstancesResultMixin::class.java)
     .addMixIn(DescribeInternetGatewaysResult::class.java, DescribeInternetGatewaysResultMixin::class.java)

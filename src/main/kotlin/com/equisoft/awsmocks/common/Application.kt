@@ -1,27 +1,36 @@
 package com.equisoft.awsmocks.common
 
 import com.equisoft.awsmocks.common.interfaces.http.feature.ResponseLogging
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
+import io.ktor.serialization.ContentConverter
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import org.koin.core.Koin
 import org.koin.core.qualifier.named
 
 fun Application.installContentNegotiation(injector: Koin, mainContentType: ContentType) {
-    val contentNegotiationFeature: ContentNegotiation = install(ContentNegotiation) {
+    lateinit var anyContentConverter: ContentConverter
+    val jsonContentConverter: ContentConverter = injector.get(named("json"))
+    val xmlContentConverter: ContentConverter = injector.get(named("xml"))
+
+    install(ContentNegotiation) {
         if (mainContentType.match(ContentType.Application.Json)) {
-            register(ContentType.Any, injector.get(named("json")))
-            register(ContentType.Application.Json, injector.get(named("json")))
-            register(ContentType.Application.Xml, injector.get(named("xml")))
+            anyContentConverter = jsonContentConverter
+            register(ContentType.Any, jsonContentConverter)
+            register(ContentType.Application.Json, jsonContentConverter)
+            register(ContentType.Application.Xml, xmlContentConverter)
         } else {
-            register(ContentType.Any, injector.get(named("xml")))
-            register(ContentType.Application.Xml, injector.get(named("xml")))
-            register(ContentType.Application.Json, injector.get(named("json")))
+            anyContentConverter = xmlContentConverter
+            register(ContentType.Any, xmlContentConverter)
+            register(ContentType.Application.Xml, xmlContentConverter)
+            register(ContentType.Application.Json, jsonContentConverter)
         }
     }
 
     install(ResponseLogging) {
-        contentNegotiation = contentNegotiationFeature
+        this.anyContentConverter = anyContentConverter
+        this.jsonContentConverter = jsonContentConverter
+        this.xmlContentConverter = xmlContentConverter
     }
 }

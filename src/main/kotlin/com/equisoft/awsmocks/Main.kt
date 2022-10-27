@@ -10,7 +10,7 @@ import com.equisoft.awsmocks.ecs.ecs
 import com.equisoft.awsmocks.elb.elb
 import com.equisoft.awsmocks.kms.kms
 import com.equisoft.awsmocks.route53.route53
-import io.ktor.application.Application
+import io.ktor.server.application.Application
 import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
@@ -42,6 +42,7 @@ fun main() {
                     Jetty,
                     environment = applicationEngineEnvironment {
                         connector {
+                            host = "0.0.0.0"
                             port = it.second
                         }
 

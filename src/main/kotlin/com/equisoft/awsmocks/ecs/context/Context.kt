@@ -16,7 +16,7 @@ import com.equisoft.awsmocks.ecs.infrastructure.persistence.ClusterRepository
 import com.equisoft.awsmocks.ecs.infrastructure.persistence.ServiceRepository
 import com.equisoft.awsmocks.ecs.infrastructure.persistence.TaskDefinitionRepository
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -40,7 +40,7 @@ fun ecsModules(): List<Module> {
         single { xmlMapper() }
         single {
             objectMapper()
-                .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
+                .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
                 .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
         }
     }, contentConvertersModule())

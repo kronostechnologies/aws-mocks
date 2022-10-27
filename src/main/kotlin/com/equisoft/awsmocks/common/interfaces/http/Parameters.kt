@@ -5,10 +5,10 @@ package com.equisoft.awsmocks.common.interfaces.http
 import com.amazonaws.AmazonWebServiceRequest
 import com.equisoft.awsmocks.common.context.AwsEnvironment
 import com.equisoft.awsmocks.common.context.applicationConfig
-import io.ktor.application.ApplicationCall
-import io.ktor.application.call
 import io.ktor.http.HttpHeaders
-import io.ktor.request.ApplicationRequest
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.call
+import io.ktor.server.request.ApplicationRequest
 import io.ktor.util.pipeline.PipelineContext
 
 private const val AwsRegion = "AwsRegion"

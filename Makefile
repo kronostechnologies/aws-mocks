@@ -1,7 +1,7 @@
 .PHONY: build_image test_infra_init test_infra test_infra_plan
 
 build_image:
-	docker build -t ghcr.io/kronostechnologies/aws-mocks .
+	docker build -t ghcr.io/kronostechnologies/aws-mocks --progress plain .
 
 test_infra_init:
 	cd src/test/resources/infra/terraform && TF_DATA_DIR=../../.terraform terraform init
